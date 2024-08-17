@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
 
     private Camera mainCam;
-    
+
     private Vector2 moveDirection;
 
 
@@ -24,12 +24,12 @@ public class PlayerMovement : MonoBehaviour
     {
         ProcessInputs();
     }
-    
+
     void FixedUpdate()
     {
         Move();
     }
-    
+
     void ProcessInputs()
     {
         float moveX = Input.GetAxisRaw("Horizontal");
