@@ -53,9 +53,9 @@ public class ScaleGun : MonoBehaviour
             Instantiate(objectPrefab, transform.position + transform.right * 2, Quaternion.identity);
         }
     }
-    
 
-    
+
+
     private void Shoot()
     {
         if (hitHoldableObject != null)
@@ -106,7 +106,7 @@ public class ScaleGun : MonoBehaviour
         _lineRenderer.SetPosition(0, startPosition);
         _lineRenderer.SetPosition(1, endPosition);
     }
-    
+
     private void DrawLineToRight()
     {
         Vector3 startPosition = transform.position;
@@ -122,7 +122,8 @@ public class ScaleGun : MonoBehaviour
         if (_isHoldingObject) return; // Prevent picking up another object if one is already held
 
         int holdableLayerMask = LayerMask.GetMask("HoldableObject");
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, _currentLineLength, holdableLayerMask);
+        RaycastHit2D hit =
+            Physics2D.Raycast(transform.position, transform.right, _currentLineLength, holdableLayerMask);
 
         if (hit.collider != null)
         {
@@ -173,6 +174,16 @@ public class ScaleGun : MonoBehaviour
         }
     }
 
+    private void DisableLineRenderer()
+    {
+        _lineRenderer.enabled = false;
+    }
+
+    private void EnableLineRenderer()
+    {
+        _lineRenderer.enabled = true;
+    }
+
     private void StartHoldingObject()
     {
         _initialDistanceToPlayer = Vector3.Distance(transform.position, hitHoldableObject.transform.position);
@@ -189,7 +200,8 @@ public class ScaleGun : MonoBehaviour
         Vector3 startPosition = _lineRenderer.GetPosition(0);
         Vector3 endPosition = startPosition + transform.right * _initialDistanceToPlayer; // Change direction to right
 
-        hitHoldableObject.transform.position = Vector3.Lerp(hitHoldableObject.transform.position, endPosition, Time.deltaTime * SlerpSpeed / hitHoldableObject.Mass);
+        hitHoldableObject.transform.position = Vector3.Lerp(hitHoldableObject.transform.position, endPosition,
+            Time.deltaTime * SlerpSpeed / hitHoldableObject.Mass);
 
         _objectVelocity = (hitHoldableObject.transform.position - _lastPosition) / Time.deltaTime;
         _lastPosition = hitHoldableObject.transform.position;
@@ -241,6 +253,8 @@ public class ScaleGun : MonoBehaviour
     {
         if (hitHoldableObject == null || !_isInHoldMode) return;
 
+        DisableLineRenderer(); // Disable the line renderer when the spline is active
+
         Vector3 startPosition = transform.position;
         Vector3 endPosition = hitHoldableObject.transform.position;
         Vector3 controlPoint = startPosition + transform.right * 5; // Change direction to right
@@ -251,12 +265,13 @@ public class ScaleGun : MonoBehaviour
         for (int i = 0; i < numPoints; i++)
         {
             float t = i / (float)(numPoints - 1);
-            Vector3 pointOnSpline = Mathf.Pow(1 - t, 2) * startPosition + 2 * (1 - t) * t * controlPoint + Mathf.Pow(t, 2) * endPosition;
+            Vector3 pointOnSpline = Mathf.Pow(1 - t, 2) * startPosition + 2 * (1 - t) * t * controlPoint +
+                                    Mathf.Pow(t, 2) * endPosition;
             _splineRenderer.SetPosition(i, pointOnSpline);
         }
     }
-    
-    
+
+
 
     private void ResetLineRenderer()
     {
@@ -283,5 +298,6 @@ public class ScaleGun : MonoBehaviour
     private void DisableSplineRenderer()
     {
         _splineRenderer.positionCount = 0;
+        EnableLineRenderer(); // Re-enable the line renderer when the spline is disabled
     }
 }
