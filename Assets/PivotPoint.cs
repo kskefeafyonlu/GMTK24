@@ -6,7 +6,7 @@ using UnityEngine;
 public class PivotPoint : MonoBehaviour
 {
     private Camera mainCam;
-    private float rotationSpeed = 35f; 
+    public float rotationSpeed = 35f; 
 
     private void Awake()
     {
@@ -28,6 +28,7 @@ public class PivotPoint : MonoBehaviour
         Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
 
         //rotate towards mouse
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        // transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        transform.rotation = targetRotation;
     }
 }
