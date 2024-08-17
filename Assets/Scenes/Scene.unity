@@ -122,6 +122,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &7649189 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1149089600397424719, guid: d7a964fb6eef4b0469ea207df21140e3, type: 3}
+  m_PrefabInstance: {fileID: 3506923528838244812}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &135983260
 GameObject:
   m_ObjectHideFlags: 0
@@ -505,9 +510,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 442372908585720282, guid: d7a964fb6eef4b0469ea207df21140e3, type: 3}
+      propertyPath: playerGun
+      value: 
+      objectReference: {fileID: 7649189}
     - target: {fileID: 1452782436473932935, guid: d7a964fb6eef4b0469ea207df21140e3, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2366126728400594220, guid: d7a964fb6eef4b0469ea207df21140e3, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2366126728400594220, guid: d7a964fb6eef4b0469ea207df21140e3, type: 3}
+      propertyPath: m_FlipY
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3311576805948136308, guid: d7a964fb6eef4b0469ea207df21140e3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -548,6 +565,14 @@ PrefabInstance:
     - target: {fileID: 3311576805948136308, guid: d7a964fb6eef4b0469ea207df21140e3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5041966607173657533, guid: d7a964fb6eef4b0469ea207df21140e3, type: 3}
+      propertyPath: rotationSpeed
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7101757966927248220, guid: d7a964fb6eef4b0469ea207df21140e3, type: 3}
+      propertyPath: m_FlipX
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

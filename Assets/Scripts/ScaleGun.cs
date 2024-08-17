@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-
 public class ScaleGun : MonoBehaviour
 {
+    public PlayerMovement PlayerMovement;
+    
     public Material lineMaterial;
     public Material splineMaterial;
     public HoldableObject hitHoldableObject;
@@ -27,6 +25,8 @@ public class ScaleGun : MonoBehaviour
     private Vector3 _lastPosition;
     private Vector3 _objectVelocity;
     private Camera mainCam;
+    
+    private bool isGunFacingRight = true;
 
     private float _initialDistanceToPlayer;
 
@@ -34,6 +34,8 @@ public class ScaleGun : MonoBehaviour
 
     private void Awake()
     {
+        PlayerMovement = GetComponentInParent<PlayerMovement>();
+        
         mainCam = Camera.main;
         InitializeLineRenderer();
         InitializeSplineRenderer();
@@ -42,7 +44,14 @@ public class ScaleGun : MonoBehaviour
 
     private void Update()
     {
-        DrawLineToRight();
+        if (PlayerMovement.isFacingRight) // Assuming you have a way to check if the gun is facing right
+        {
+            DrawLineToRight();
+        }
+        else
+        {
+            DrawLineToLeft();
+        }
         CheckForHoldableObject();
         HandleHoldLogic();
         ModifyHoldableObject();
@@ -53,9 +62,6 @@ public class ScaleGun : MonoBehaviour
             Instantiate(objectPrefab, transform.position + transform.right * 2, Quaternion.identity);
         }
     }
-
-
-
     private void Shoot()
     {
         if (hitHoldableObject != null)
@@ -84,6 +90,8 @@ public class ScaleGun : MonoBehaviour
         _lineRenderer.endWidth = 0.1f;
         _lineRenderer.positionCount = 2;
         _originalColor = _lineRenderer.startColor;
+        
+        _lineRenderer.transform.SetParent(transform);
     }
 
     private void InitializeSplineRenderer()
@@ -96,21 +104,20 @@ public class ScaleGun : MonoBehaviour
         _splineRenderer.endWidth = 0.1f;
         _splineRenderer.positionCount = 0;
     }
-
-    private void DrawLineUpwards()
+    private void DrawLineToRight()
     {
         Vector3 startPosition = transform.position;
-        Vector3 direction = transform.up;
+        Vector3 direction = transform.right;
         Vector3 endPosition = startPosition + direction * _currentLineLength;
 
         _lineRenderer.SetPosition(0, startPosition);
         _lineRenderer.SetPosition(1, endPosition);
     }
-
-    private void DrawLineToRight()
+    
+    private void DrawLineToLeft()
     {
         Vector3 startPosition = transform.position;
-        Vector3 direction = transform.right;
+        Vector3 direction = -transform.right; // Change direction to left
         Vector3 endPosition = startPosition + direction * _currentLineLength;
 
         _lineRenderer.SetPosition(0, startPosition);
@@ -156,7 +163,7 @@ public class ScaleGun : MonoBehaviour
             }
 
             IncreaseLineLength();
-            SetLineColor(Color.white, Color.cyan);
+            SetLineColor(Color.white, Color.cyan); // Set the line color to cyan when holding an object
         }
         else
         {
