@@ -55,6 +55,26 @@ public class ScaleGun : MonoBehaviour
     }
     
 
+    
+    private void Shoot()
+    {
+        if (hitHoldableObject != null)
+        {
+            // Release the object
+            _isHoldingObject = false;
+            _isInHoldMode = false;
+
+            // Apply shooting logic
+            Rigidbody2D rb = hitHoldableObject.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.velocity = transform.right * 10f; // Set bullet speed
+            }
+
+            // Clear the reference to the holdable object
+            hitHoldableObject = null;
+        }
+    }
 
     private void InitializeLineRenderer()
     {
@@ -148,6 +168,7 @@ public class ScaleGun : MonoBehaviour
                 ApplyMomentum();
                 ResetLineRenderer();
                 DisableSplineRenderer();
+                Shoot(); // Call Shoot method when left mouse button is released
             }
         }
     }
@@ -166,7 +187,7 @@ public class ScaleGun : MonoBehaviour
         if (hitHoldableObject == null) return;
 
         Vector3 startPosition = _lineRenderer.GetPosition(0);
-        Vector3 endPosition = startPosition + transform.up * _initialDistanceToPlayer;
+        Vector3 endPosition = startPosition + transform.right * _initialDistanceToPlayer; // Change direction to right
 
         hitHoldableObject.transform.position = Vector3.Lerp(hitHoldableObject.transform.position, endPosition, Time.deltaTime * SlerpSpeed / hitHoldableObject.Mass);
 
@@ -222,7 +243,7 @@ public class ScaleGun : MonoBehaviour
 
         Vector3 startPosition = transform.position;
         Vector3 endPosition = hitHoldableObject.transform.position;
-        Vector3 controlPoint = startPosition + transform.up * 5;
+        Vector3 controlPoint = startPosition + transform.right * 5; // Change direction to right
 
         int numPoints = 20;
         _splineRenderer.positionCount = numPoints;
@@ -234,6 +255,8 @@ public class ScaleGun : MonoBehaviour
             _splineRenderer.SetPosition(i, pointOnSpline);
         }
     }
+    
+    
 
     private void ResetLineRenderer()
     {

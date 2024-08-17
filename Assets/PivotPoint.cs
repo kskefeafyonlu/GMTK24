@@ -24,7 +24,7 @@ public class PivotPoint : MonoBehaviour
         Vector2 mouseWorldPos = mainCam.ScreenToWorldPoint(Input.mousePosition);
 
         //get angle between pivot point and mouse
-        float targetAngle = Mathf.Atan2(mouseWorldPos.y - transform.position.y, mouseWorldPos.x - transform.position.x) * Mathf.Rad2Deg - 90f;
+        float targetAngle = Mathf.Atan2(mouseWorldPos.y - transform.position.y, mouseWorldPos.x - transform.position.x) * Mathf.Rad2Deg ;
         Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
 
         //rotate towards mouse
