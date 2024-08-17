@@ -503,6 +503,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9212769466398631029, guid: dc3854d017b14994eba81f1025a26afc, type: 3}
+      propertyPath: lineMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 23138182c8c50894c8dbd50cc58da8b5, type: 2}
+    - target: {fileID: 9212769466398631029, guid: dc3854d017b14994eba81f1025a26afc, type: 3}
       propertyPath: _lineMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 23138182c8c50894c8dbd50cc58da8b5, type: 2}
