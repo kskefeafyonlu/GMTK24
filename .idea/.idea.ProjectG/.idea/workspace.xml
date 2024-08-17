@@ -24,7 +24,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Procedural-Map&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -90,6 +90,8 @@
       <workItem from="1723873744433" duration="25000" />
       <workItem from="1723873783127" duration="837000" />
       <workItem from="1723874665078" duration="1097000" />
+      <workItem from="1723884764177" duration="528000" />
+      <workItem from="1723885308001" duration="1086000" />
     </task>
     <servers />
   </component>
