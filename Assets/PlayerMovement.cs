@@ -28,7 +28,6 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         Move();
-        LookAtMouse();
     }
     
     void ProcessInputs()
@@ -44,12 +43,5 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
     }
 
-    private void LookAtMouse()
-    {
-        Vector2 mouseWorldPos = mainCam.ScreenToWorldPoint(Input.mousePosition);
-        
 
-        float rot = Mathf.Atan2(mouseWorldPos.y - transform.position.y, mouseWorldPos.x - transform.position.x) * Mathf.Rad2Deg - 90f;
-        transform.rotation = Quaternion.Euler(0, 0, rot);
-    }
 }
