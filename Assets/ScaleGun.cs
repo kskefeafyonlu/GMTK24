@@ -7,19 +7,25 @@ public class ScaleGun : MonoBehaviour
 {
     public Material lineMaterial;
     public HoldableObject hitHoldableObject;
-    public Color holdColor = Color.red; // Color when holding the mouse button
     public float SlerpSpeed = 5f; // Speed of the Slerp movement
+    public float initialLength = 0f; // Initial length when holding starts
+    public float lengthChangeSpeed = 1f; // Speed of the length change
+    public float maxLineLength = 10f; // Maximum length of the line
+    public float scaleChangeSpeed = 1f; // Speed of the scale change
+    public float lengthGrowSpeed = 5f; // Speed of the length growth
 
     private LineRenderer _lineRenderer;
     private Color _originalColor = Color.white;
-    private Color _originalColor2 = Color.cyan;
+    private Color _originalColor2 = Color.red;
     private float _normalizedDistance;
     private bool _isHoldingObject = false;
     private bool _isInHoldMode = false;
+    private float _currentLineLength;
 
     private void Awake()
     {
         InitializeLineRenderer();
+        _currentLineLength = initialLength; // Set initial length to 0
     }
 
     private void Update()
@@ -28,7 +34,6 @@ public class ScaleGun : MonoBehaviour
         CheckForHoldableObject();
         HoldLogic();
         ModifyHoldableObject();
-        
         DrawSplineBetweenObjectAndGun();
     }
 
@@ -51,15 +56,32 @@ public class ScaleGun : MonoBehaviour
                 ControlHoldableObject();
             }
 
-            SetLineColor(holdColor);
+            IncreaseLineLength();
+            SetColor(Color.white, Color.cyan);
         }
         else
         {
             SetLineColor(_originalColor, _originalColor2);
             _isHoldingObject = false;
             _isInHoldMode = false;
-            ResetLineRenderer(); // Reset the LineRenderer when the mouse button is released
+            DecreaseLineLength(); // Decrease the LineRenderer length when the mouse button is released
+            if (hitHoldableObject != null)
+            {
+                ResetLineRenderer();
+            }
         }
+    }
+    
+    // Gradually increase the length of the line
+    private void IncreaseLineLength()
+    {
+        _currentLineLength = Mathf.Min(_currentLineLength + lengthGrowSpeed * Time.deltaTime, maxLineLength);
+    }
+
+// Gradually decrease the length of the line
+    private void DecreaseLineLength()
+    {
+        _currentLineLength = Mathf.Max(_currentLineLength - lengthGrowSpeed * Time.deltaTime, 0f);
     }
 
     // Initialize the LineRenderer component
@@ -78,7 +100,7 @@ public class ScaleGun : MonoBehaviour
     {
         Vector3 startPosition = transform.position;
         Vector3 direction = transform.up; // Use the parent's up direction
-        Vector3 endPosition = startPosition + direction * 10; // Adjust the length as needed
+        Vector3 endPosition = startPosition + direction * _currentLineLength; // Adjust the length as needed
 
         _lineRenderer.SetPosition(0, startPosition);
         _lineRenderer.SetPosition(1, endPosition);
@@ -87,7 +109,7 @@ public class ScaleGun : MonoBehaviour
     // Check if there is a holdable object in the line's path
     private void CheckForHoldableObject()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, 10); // Adjust the length as needed
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, _currentLineLength); // Adjust the length as needed
 
         if (hit.collider != null)
         {
@@ -100,8 +122,7 @@ public class ScaleGun : MonoBehaviour
             }
             else
             {
-
-                
+                hitHoldableObject = null;
             }
         }
         else
@@ -152,8 +173,6 @@ public class ScaleGun : MonoBehaviour
     }
 
     // Modify the scale of the holdable object
-    public float scaleChangeSpeed = 0.1f; // Speed of the scale change
-
     private void ModifyHoldableObject()
     {
         if (hitHoldableObject == null) return;
@@ -164,15 +183,19 @@ public class ScaleGun : MonoBehaviour
         {
             hitHoldableObject.transform.localScale += scaleChange;
             hitHoldableObject.Mass *= 1 + scaleChange.x;
+            _lineRenderer.startColor = Color.green;
         }
         else if (Input.GetKey(KeyCode.E) && hitHoldableObject.transform.localScale.x > hitHoldableObject.MinScale)
         {
             hitHoldableObject.transform.localScale -= scaleChange;
             hitHoldableObject.Mass *= 1 - scaleChange.x;
+            _lineRenderer.startColor = Color.red;
+        }
+        else
+        {
+            _lineRenderer.startColor = Color.white;
         }
     }
-
-
     private void DrawSplineBetweenObjectAndGun()
     {
         if (hitHoldableObject == null || !_isInHoldMode) return;
@@ -191,15 +214,21 @@ public class ScaleGun : MonoBehaviour
             _lineRenderer.SetPosition(i, pointOnSpline);
         }
     }
-    
     private void ResetLineRenderer()
     {
         _lineRenderer.positionCount = 2;
         Vector3 startPosition = transform.position;
         Vector3 direction = transform.up; // Use the parent's up direction
-        Vector3 endPosition = startPosition + direction * 10; // Adjust the length as needed
+        Vector3 endPosition = startPosition + direction * initialLength; // Adjust the length as needed
 
         _lineRenderer.SetPosition(0, startPosition);
         _lineRenderer.SetPosition(1, endPosition);
+        _currentLineLength = initialLength;
+    }
+
+    void SetColor(Color startColor, Color endColor)
+    {
+        _lineRenderer.startColor = startColor;
+        _lineRenderer.endColor = endColor;
     }
 }

@@ -28,7 +28,6 @@ public class PivotPoint : MonoBehaviour
         Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
 
         //rotate towards mouse
-        // transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        transform.rotation = targetRotation;
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 }
