@@ -6,15 +6,18 @@ using UnityEngine.Serialization;
 public class ScaleGun : MonoBehaviour
 {
     public Material lineMaterial;
+    public Material splineMaterial;
     public HoldableObject hitHoldableObject;
-    public float SlerpSpeed = 5f; // Speed of the Slerp movement
-    public float initialLength = 0f; // Initial length when holding starts
-    public float lengthChangeSpeed = 1f; // Speed of the length change
-    public float maxLineLength = 10f; // Maximum length of the line
-    public float scaleChangeSpeed = 1f; // Speed of the scale change
-    public float lengthGrowSpeed = 5f; // Speed of the length growth
+    public float SlerpSpeed = 5f;
+    public float initialLength = 0f;
+    public float lengthChangeSpeed = 1f;
+    public float maxLineLength = 10f;
+    public float scaleChangeSpeed = 1f;
+    public float lengthGrowSpeed = 5f;
 
     private LineRenderer _lineRenderer;
+    private LineRenderer _splineRenderer;
+    private GameObject _splineObject;
     private Color _originalColor = Color.white;
     private Color _originalColor2 = Color.red;
     private float _normalizedDistance;
@@ -24,22 +27,84 @@ public class ScaleGun : MonoBehaviour
     private Vector3 _lastPosition;
     private Vector3 _objectVelocity;
 
+    
+    private float _initialDistanceToPlayer;
+
+
+    public GameObject objectPrefab;
+    
     private void Awake()
     {
         InitializeLineRenderer();
-        _currentLineLength = initialLength; // Set initial length to 0
+        InitializeSplineRenderer();
+        _currentLineLength = initialLength;
     }
 
     private void Update()
     {
         DrawLineUpwards();
         CheckForHoldableObject();
-        HoldLogic();
+        HandleHoldLogic();
         ModifyHoldableObject();
         DrawSplineBetweenObjectAndGun();
+
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Instantiate(objectPrefab, transform.position + transform.up * 2, Quaternion.identity);
+        }
     }
 
-    private void HoldLogic()
+    private void InitializeLineRenderer()
+    {
+        _lineRenderer = gameObject.AddComponent<LineRenderer>();
+        _lineRenderer.material = lineMaterial;
+        _lineRenderer.startWidth = 0.1f;
+        _lineRenderer.endWidth = 0.1f;
+        _lineRenderer.positionCount = 2;
+        _originalColor = _lineRenderer.startColor;
+    }
+
+    private void InitializeSplineRenderer()
+    {
+        _splineObject = new GameObject("SplineRenderer");
+        _splineObject.transform.SetParent(transform);
+        _splineRenderer = _splineObject.AddComponent<LineRenderer>();
+        _splineRenderer.material = splineMaterial;
+        _splineRenderer.startWidth = 0.1f;
+        _splineRenderer.endWidth = 0.1f;
+        _splineRenderer.positionCount = 0;
+    }
+
+    private void DrawLineUpwards()
+    {
+        Vector3 startPosition = transform.position;
+        Vector3 direction = transform.up;
+        Vector3 endPosition = startPosition + direction * _currentLineLength;
+
+        _lineRenderer.SetPosition(0, startPosition);
+        _lineRenderer.SetPosition(1, endPosition);
+    }
+
+    private void CheckForHoldableObject()
+    {
+        if (_isHoldingObject) return; // Prevent picking up another object if one is already held
+
+        int holdableLayerMask = LayerMask.GetMask("HoldableObject");
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, _currentLineLength, holdableLayerMask);
+
+        if (hit.collider != null)
+        {
+            HoldableObject holdableObject = hit.collider.GetComponent<HoldableObject>();
+            hitHoldableObject = holdableObject != null ? holdableObject : null;
+        }
+        else if (!_isInHoldMode)
+        {
+            hitHoldableObject = null;
+        }
+    }
+
+    private void HandleHoldLogic()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -59,116 +124,45 @@ public class ScaleGun : MonoBehaviour
             }
 
             IncreaseLineLength();
-            SetColor(Color.white, Color.cyan);
+            SetLineColor(Color.white, Color.cyan);
         }
         else
         {
             SetLineColor(_originalColor, _originalColor2);
             _isHoldingObject = false;
             _isInHoldMode = false;
-            DecreaseLineLength(); // Decrease the LineRenderer length when the mouse button is released
+            DecreaseLineLength();
             if (hitHoldableObject != null)
             {
                 ApplyMomentum();
                 ResetLineRenderer();
+                DisableSplineRenderer();
             }
         }
     }
 
-    // Gradually increase the length of the line
-    private void IncreaseLineLength()
-    {
-        _currentLineLength = Mathf.Min(_currentLineLength + lengthGrowSpeed * Time.deltaTime, maxLineLength);
-    }
-
-    // Gradually decrease the length of the line
-    private void DecreaseLineLength()
-    {
-        _currentLineLength = Mathf.Max(_currentLineLength - lengthGrowSpeed * Time.deltaTime, 0f);
-    }
-
-    // Initialize the LineRenderer component
-    private void InitializeLineRenderer()
-    {
-        _lineRenderer = gameObject.AddComponent<LineRenderer>();
-        _lineRenderer.material = lineMaterial;
-        _lineRenderer.startWidth = 0.1f;
-        _lineRenderer.endWidth = 0.1f;
-        _lineRenderer.positionCount = 2;
-        _originalColor = _lineRenderer.startColor;
-    }
-
-    // Draw a line upwards from the object's position
-    private void DrawLineUpwards()
-    {
-        Vector3 startPosition = transform.position;
-        Vector3 direction = transform.up; // Use the parent's up direction
-        Vector3 endPosition = startPosition + direction * _currentLineLength; // Adjust the length as needed
-
-        _lineRenderer.SetPosition(0, startPosition);
-        _lineRenderer.SetPosition(1, endPosition);
-    }
-
-    // Check if there is a holdable object in the line's path
-    private void CheckForHoldableObject()
-    {
-        int holdableLayerMask = LayerMask.GetMask("HoldableObject");
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, _currentLineLength, holdableLayerMask); // Adjust the length as needed
-
-        if (hit.collider != null)
-        {
-            HoldableObject holdableObject = hit.collider.GetComponent<HoldableObject>();
-
-            if (holdableObject != null)
-            {
-                Debug.Log("Hit " + holdableObject.name);
-                hitHoldableObject = holdableObject;
-            }
-            else
-            {
-                hitHoldableObject = null;
-            }
-        }
-        else
-        {
-            if (!_isInHoldMode)
-            {
-                hitHoldableObject = null;
-            }
-        }
-    }
-
-    // Start holding the object and calculate the initial normalized distance
     private void StartHoldingObject()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, hitHoldableObject.transform.position);
+        _initialDistanceToPlayer = Vector3.Distance(transform.position, hitHoldableObject.transform.position);
         float maxDistance = Vector3.Distance(_lineRenderer.GetPosition(0), _lineRenderer.GetPosition(1));
-        _normalizedDistance = Mathf.Clamp01(distanceToPlayer / maxDistance);
+        _normalizedDistance = Mathf.Clamp01(_initialDistanceToPlayer / maxDistance);
         _isHoldingObject = true;
         _lastPosition = hitHoldableObject.transform.position;
     }
 
-    // Control the position of the holdable object along the line
     private void ControlHoldableObject()
     {
         if (hitHoldableObject == null) return;
 
         Vector3 startPosition = _lineRenderer.GetPosition(0);
-        Vector3 endPosition = _lineRenderer.GetPosition(1);
+        Vector3 endPosition = startPosition + transform.up * _initialDistanceToPlayer;
 
-        // Project the normalized distance onto the line
-        Vector3 lineDirection = (endPosition - startPosition).normalized;
-        Vector3 pointOnLine = startPosition + lineDirection * (_normalizedDistance * Vector3.Distance(startPosition, endPosition));
+        hitHoldableObject.transform.position = Vector3.Lerp(hitHoldableObject.transform.position, endPosition, Time.deltaTime * SlerpSpeed / hitHoldableObject.Mass);
 
-        // Move the holdable object to the calculated point on the line using Slerp
-        hitHoldableObject.transform.position = Vector3.Slerp(hitHoldableObject.transform.position, pointOnLine, Time.deltaTime * SlerpSpeed / hitHoldableObject.Mass); // Adjust the speed factor as needed
-
-        // Calculate the velocity of the object
         _objectVelocity = (hitHoldableObject.transform.position - _lastPosition) / Time.deltaTime;
         _lastPosition = hitHoldableObject.transform.position;
     }
 
-    // Apply the stored velocity to the object when it is released
     private void ApplyMomentum()
     {
         if (hitHoldableObject != null)
@@ -181,20 +175,12 @@ public class ScaleGun : MonoBehaviour
         }
     }
 
-    // Set the color of the line
     private void SetLineColor(Color startColor, Color endColor)
     {
         _lineRenderer.startColor = startColor;
         _lineRenderer.endColor = endColor;
     }
 
-    // Overload method to set the same color for both start and end of the line
-    private void SetLineColor(Color color)
-    {
-        SetLineColor(color, color);
-    }
-
-    // Modify the scale of the holdable object
     private void ModifyHoldableObject()
     {
         if (hitHoldableObject == null) return;
@@ -225,16 +211,16 @@ public class ScaleGun : MonoBehaviour
 
         Vector3 startPosition = transform.position;
         Vector3 endPosition = hitHoldableObject.transform.position;
-        Vector3 controlPoint = startPosition + transform.up * 5; // Adjust the control point to be upwards from the gun
+        Vector3 controlPoint = startPosition + transform.up * 5;
 
-        int numPoints = 20; // Number of points on the spline
-        _lineRenderer.positionCount = numPoints;
+        int numPoints = 20;
+        _splineRenderer.positionCount = numPoints;
 
         for (int i = 0; i < numPoints; i++)
         {
             float t = i / (float)(numPoints - 1);
             Vector3 pointOnSpline = Mathf.Pow(1 - t, 2) * startPosition + 2 * (1 - t) * t * controlPoint + Mathf.Pow(t, 2) * endPosition;
-            _lineRenderer.SetPosition(i, pointOnSpline);
+            _splineRenderer.SetPosition(i, pointOnSpline);
         }
     }
 
@@ -242,17 +228,26 @@ public class ScaleGun : MonoBehaviour
     {
         _lineRenderer.positionCount = 2;
         Vector3 startPosition = transform.position;
-        Vector3 direction = transform.up; // Use the parent's up direction
-        Vector3 endPosition = startPosition + direction * initialLength; // Adjust the length as needed
+        Vector3 direction = transform.up;
+        Vector3 endPosition = startPosition + direction * initialLength;
 
         _lineRenderer.SetPosition(0, startPosition);
         _lineRenderer.SetPosition(1, endPosition);
         _currentLineLength = initialLength;
     }
 
-    void SetColor(Color startColor, Color endColor)
+    private void IncreaseLineLength()
     {
-        _lineRenderer.startColor = startColor;
-        _lineRenderer.endColor = endColor;
+        _currentLineLength = Mathf.Min(_currentLineLength + lengthGrowSpeed * Time.deltaTime, maxLineLength);
+    }
+
+    private void DecreaseLineLength()
+    {
+        _currentLineLength = Mathf.Max(_currentLineLength - lengthGrowSpeed * Time.deltaTime, 0f);
+    }
+    
+    private void DisableSplineRenderer()
+    {
+        _splineRenderer.positionCount = 0;
     }
 }

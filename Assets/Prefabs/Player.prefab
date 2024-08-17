@@ -98,13 +98,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineMaterial: {fileID: 2100000, guid: 23138182c8c50894c8dbd50cc58da8b5, type: 2}
+  splineMaterial: {fileID: 2100000, guid: 23138182c8c50894c8dbd50cc58da8b5, type: 2}
   hitHoldableObject: {fileID: 0}
-  SlerpSpeed: 5
+  SlerpSpeed: 10
   initialLength: 0
   lengthChangeSpeed: 1
   maxLineLength: 10
   scaleChangeSpeed: 1
   lengthGrowSpeed: 5
+  objectPrefab: {fileID: 6455848894907149290, guid: d2b63aa519681ba4f99ef44287fa9f35, type: 3}
 --- !u!1 &8220330879573923338
 GameObject:
   m_ObjectHideFlags: 0
