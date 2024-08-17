@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c551fdd533d33384bb8de0e85e891102, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Mass: 1
+  Mass: 5
   MaxScale: 2
   MinScale: 0.5
 --- !u!212 &525942396

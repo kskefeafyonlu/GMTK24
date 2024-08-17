@@ -21,6 +21,8 @@ public class ScaleGun : MonoBehaviour
     private bool _isHoldingObject = false;
     private bool _isInHoldMode = false;
     private float _currentLineLength;
+    private Vector3 _lastPosition;
+    private Vector3 _objectVelocity;
 
     private void Awake()
     {
@@ -67,18 +69,19 @@ public class ScaleGun : MonoBehaviour
             DecreaseLineLength(); // Decrease the LineRenderer length when the mouse button is released
             if (hitHoldableObject != null)
             {
+                ApplyMomentum();
                 ResetLineRenderer();
             }
         }
     }
-    
+
     // Gradually increase the length of the line
     private void IncreaseLineLength()
     {
         _currentLineLength = Mathf.Min(_currentLineLength + lengthGrowSpeed * Time.deltaTime, maxLineLength);
     }
 
-// Gradually decrease the length of the line
+    // Gradually decrease the length of the line
     private void DecreaseLineLength()
     {
         _currentLineLength = Mathf.Max(_currentLineLength - lengthGrowSpeed * Time.deltaTime, 0f);
@@ -141,6 +144,7 @@ public class ScaleGun : MonoBehaviour
         float maxDistance = Vector3.Distance(_lineRenderer.GetPosition(0), _lineRenderer.GetPosition(1));
         _normalizedDistance = Mathf.Clamp01(distanceToPlayer / maxDistance);
         _isHoldingObject = true;
+        _lastPosition = hitHoldableObject.transform.position;
     }
 
     // Control the position of the holdable object along the line
@@ -157,6 +161,23 @@ public class ScaleGun : MonoBehaviour
 
         // Move the holdable object to the calculated point on the line using Slerp
         hitHoldableObject.transform.position = Vector3.Slerp(hitHoldableObject.transform.position, pointOnLine, Time.deltaTime * SlerpSpeed / hitHoldableObject.Mass); // Adjust the speed factor as needed
+
+        // Calculate the velocity of the object
+        _objectVelocity = (hitHoldableObject.transform.position - _lastPosition) / Time.deltaTime;
+        _lastPosition = hitHoldableObject.transform.position;
+    }
+
+    // Apply the stored velocity to the object when it is released
+    private void ApplyMomentum()
+    {
+        if (hitHoldableObject != null)
+        {
+            Rigidbody2D rb = hitHoldableObject.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.velocity = _objectVelocity;
+            }
+        }
     }
 
     // Set the color of the line
@@ -196,6 +217,7 @@ public class ScaleGun : MonoBehaviour
             _lineRenderer.startColor = Color.white;
         }
     }
+
     private void DrawSplineBetweenObjectAndGun()
     {
         if (hitHoldableObject == null || !_isInHoldMode) return;
@@ -214,6 +236,7 @@ public class ScaleGun : MonoBehaviour
             _lineRenderer.SetPosition(i, pointOnSpline);
         }
     }
+
     private void ResetLineRenderer()
     {
         _lineRenderer.positionCount = 2;
