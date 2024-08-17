@@ -100,6 +100,8 @@ MonoBehaviour:
   lineMaterial: {fileID: 2100000, guid: 23138182c8c50894c8dbd50cc58da8b5, type: 2}
   hitHoldableObject: {fileID: 0}
   holdColor: {r: 1, g: 0, b: 0, a: 1}
+  SlerpSpeed: 2
+  scaleChangeSpeed: 1
 --- !u!1 &8220330879573923338
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,4 +274,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb3783a5d55838e41a4422902fe72ca4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 35
+  rotationSpeed: 100

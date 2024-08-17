@@ -29,7 +29,7 @@ public class ScaleGun : MonoBehaviour
         HoldLogic();
         ModifyHoldableObject();
         
-        // DrawSplineBetweenObjectAndGun();
+        DrawSplineBetweenObjectAndGun();
     }
 
     private void HoldLogic()
@@ -58,6 +58,7 @@ public class ScaleGun : MonoBehaviour
             SetLineColor(_originalColor, _originalColor2);
             _isHoldingObject = false;
             _isInHoldMode = false;
+            ResetLineRenderer(); // Reset the LineRenderer when the mouse button is released
         }
     }
 
@@ -151,33 +152,34 @@ public class ScaleGun : MonoBehaviour
     }
 
     // Modify the scale of the holdable object
+    public float scaleChangeSpeed = 0.1f; // Speed of the scale change
+
     private void ModifyHoldableObject()
     {
         if (hitHoldableObject == null) return;
 
-        Vector3 scaleChange = new Vector3(0.1f, 0.1f, 0.1f);
+        Vector3 scaleChange = new Vector3(scaleChangeSpeed, scaleChangeSpeed, scaleChangeSpeed) * Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.Q) && hitHoldableObject.transform.localScale.x < hitHoldableObject.MaxScale)
+        if (Input.GetKey(KeyCode.Q) && hitHoldableObject.transform.localScale.x < hitHoldableObject.MaxScale)
         {
             hitHoldableObject.transform.localScale += scaleChange;
-            hitHoldableObject.Mass *=  1 + scaleChange.x;
+            hitHoldableObject.Mass *= 1 + scaleChange.x;
         }
-        else if (Input.GetKeyDown(KeyCode.E) && hitHoldableObject.transform.localScale.x > hitHoldableObject.MinScale)
+        else if (Input.GetKey(KeyCode.E) && hitHoldableObject.transform.localScale.x > hitHoldableObject.MinScale)
         {
             hitHoldableObject.transform.localScale -= scaleChange;
             hitHoldableObject.Mass *= 1 - scaleChange.x;
         }
-
     }
 
 
     private void DrawSplineBetweenObjectAndGun()
     {
-        if (hitHoldableObject == null) return;
+        if (hitHoldableObject == null || !_isInHoldMode) return;
 
         Vector3 startPosition = transform.position;
         Vector3 endPosition = hitHoldableObject.transform.position;
-        Vector3 controlPoint = (startPosition + endPosition) / 2 + Vector3.up * 2; // Adjust the control point as needed
+        Vector3 controlPoint = startPosition + transform.up * 5; // Adjust the control point to be upwards from the gun
 
         int numPoints = 20; // Number of points on the spline
         _lineRenderer.positionCount = numPoints;
@@ -188,5 +190,16 @@ public class ScaleGun : MonoBehaviour
             Vector3 pointOnSpline = Mathf.Pow(1 - t, 2) * startPosition + 2 * (1 - t) * t * controlPoint + Mathf.Pow(t, 2) * endPosition;
             _lineRenderer.SetPosition(i, pointOnSpline);
         }
+    }
+    
+    private void ResetLineRenderer()
+    {
+        _lineRenderer.positionCount = 2;
+        Vector3 startPosition = transform.position;
+        Vector3 direction = transform.up; // Use the parent's up direction
+        Vector3 endPosition = startPosition + direction * 10; // Adjust the length as needed
+
+        _lineRenderer.SetPosition(0, startPosition);
+        _lineRenderer.SetPosition(1, endPosition);
     }
 }

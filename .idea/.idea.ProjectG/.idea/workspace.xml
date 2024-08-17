@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e7d1cf6a-e92c-45bd-a665-2be9cfa079f5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProjectG/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProjectG/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/HoldableObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/HoldableObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/PivotPoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/PivotPoint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Player.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ScaleGun.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScaleGun.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -96,7 +93,7 @@
       <workItem from="1723873744433" duration="25000" />
       <workItem from="1723873783127" duration="837000" />
       <workItem from="1723874665078" duration="1097000" />
-      <workItem from="1723895826714" duration="1329000" />
+      <workItem from="1723895826714" duration="1971000" />
     </task>
     <servers />
   </component>
