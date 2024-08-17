@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 moveDirection;
 
-
     private void Awake()
     {
         mainCam = Camera.main;
@@ -29,7 +28,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Move();
     }
-
     void ProcessInputs()
     {
         float moveX = Input.GetAxisRaw("Horizontal");
@@ -42,6 +40,4 @@ public class PlayerMovement : MonoBehaviour
     {
         rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
     }
-
-
 }

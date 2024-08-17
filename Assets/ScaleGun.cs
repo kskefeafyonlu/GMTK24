@@ -5,29 +5,71 @@ using UnityEngine.Serialization;
 
 public class ScaleGun : MonoBehaviour
 {
+    public Material lineMaterial;
+    public HoldableObject hitHoldableObject;
+    public Color holdColor = Color.red; // Color when holding the mouse button
+
     private LineRenderer _lineRenderer;
-    public HoldableObject HitHoldableObject;
-    
+    private Color _originalColor = Color.white;
+    private Color _originalColor2 = Color.cyan;
+    private float _normalizedDistance;
+    private bool _isHoldingObject = false;
+    private bool _isInHoldMode = false;
 
     private void Awake()
     {
-        _lineRenderer = gameObject.AddComponent<LineRenderer>();
-        _lineRenderer.startWidth = 0.1f;
-        _lineRenderer.endWidth = 0.1f;
-        _lineRenderer.positionCount = 2;
+        InitializeLineRenderer();
     }
 
     private void Update()
     {
         DrawLineUpwards();
         CheckForHoldableObject();
+        HoldLogic();
+        ModifyHoldableObject();
+    }
 
-        if (Input.GetMouseButton(0))
+    private void HoldLogic()
+    {
+        if (Input.GetMouseButtonDown(0))
         {
-            ControlHoldableObject();
+            _isInHoldMode = true;
+        }
+
+        if (Input.GetMouseButton(0) && _isInHoldMode)
+        {
+            if (hitHoldableObject != null && !_isHoldingObject)
+            {
+                StartHoldingObject();
+            }
+
+            if (_isHoldingObject)
+            {
+                ControlHoldableObject();
+            }
+
+            SetLineColor(holdColor);
+        }
+        else
+        {
+            SetLineColor(_originalColor, _originalColor2);
+            _isHoldingObject = false;
+            _isInHoldMode = false;
         }
     }
 
+    // Initialize the LineRenderer component
+    private void InitializeLineRenderer()
+    {
+        _lineRenderer = gameObject.AddComponent<LineRenderer>();
+        _lineRenderer.material = lineMaterial;
+        _lineRenderer.startWidth = 0.1f;
+        _lineRenderer.endWidth = 0.1f;
+        _lineRenderer.positionCount = 2;
+        _originalColor = _lineRenderer.startColor;
+    }
+
+    // Draw a line upwards from the object's position
     private void DrawLineUpwards()
     {
         Vector3 startPosition = transform.position;
@@ -38,6 +80,7 @@ public class ScaleGun : MonoBehaviour
         _lineRenderer.SetPosition(1, endPosition);
     }
 
+    // Check if there is a holdable object in the line's path
     private void CheckForHoldableObject()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, 10); // Adjust the length as needed
@@ -48,27 +91,72 @@ public class ScaleGun : MonoBehaviour
 
             if (holdableObject != null)
             {
-                Debug.Log(" Hit " + holdableObject.name);
-                HitHoldableObject = holdableObject;
+                Debug.Log("Hit " + holdableObject.name);
+                hitHoldableObject = holdableObject;
             }
             else
             {
-                HitHoldableObject = null;
+                hitHoldableObject = null;
             }
         }
         else
         {
-            HitHoldableObject = null;
+            hitHoldableObject = null;
         }
     }
-    
+
+    // Start holding the object and calculate the initial normalized distance
+    private void StartHoldingObject()
+    {
+        float distanceToPlayer = Vector3.Distance(transform.position, hitHoldableObject.transform.position);
+        float maxDistance = Vector3.Distance(_lineRenderer.GetPosition(0), _lineRenderer.GetPosition(1));
+        _normalizedDistance = Mathf.Clamp01(distanceToPlayer / maxDistance);
+        _isHoldingObject = true;
+    }
+
+    // Control the position of the holdable object along the line
     private void ControlHoldableObject()
     {
-        if (HitHoldableObject != null)
+        if (hitHoldableObject == null) return;
+
+        Vector3 startPosition = _lineRenderer.GetPosition(0);
+        Vector3 endPosition = _lineRenderer.GetPosition(1);
+
+        // Project the normalized distance onto the line
+        Vector3 lineDirection = (endPosition - startPosition).normalized;
+        Vector3 pointOnLine = startPosition + lineDirection * (_normalizedDistance * Vector3.Distance(startPosition, endPosition));
+
+        // Move the holdable object to the calculated point on the line
+        hitHoldableObject.transform.position = pointOnLine;
+    }
+
+    // Set the color of the line
+    private void SetLineColor(Color startColor, Color endColor)
+    {
+        _lineRenderer.startColor = startColor;
+        _lineRenderer.endColor = endColor;
+    }
+
+    // Overload method to set the same color for both start and end of the line
+    private void SetLineColor(Color color)
+    {
+        SetLineColor(color, color);
+    }
+
+    // Modify the scale of the holdable object
+    private void ModifyHoldableObject()
+    {
+        if (hitHoldableObject == null) return;
+
+        Vector3 scaleChange = new Vector3(0.1f, 0.1f, 0.1f);
+
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mouseWorldPos.z = 0; // Ensure the z position is set to 0
-            HitHoldableObject.transform.position = mouseWorldPos;
+            hitHoldableObject.transform.localScale += scaleChange;
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            hitHoldableObject.transform.localScale -= scaleChange;
         }
     }
 }
