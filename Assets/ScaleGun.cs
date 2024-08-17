@@ -26,15 +26,15 @@ public class ScaleGun : MonoBehaviour
     private float _currentLineLength;
     private Vector3 _lastPosition;
     private Vector3 _objectVelocity;
+    private Camera mainCam;
 
-    
     private float _initialDistanceToPlayer;
 
-
     public GameObject objectPrefab;
-    
+
     private void Awake()
     {
+        mainCam = Camera.main;
         InitializeLineRenderer();
         InitializeSplineRenderer();
         _currentLineLength = initialLength;
@@ -42,18 +42,19 @@ public class ScaleGun : MonoBehaviour
 
     private void Update()
     {
-        DrawLineUpwards();
+        DrawLineToRight();
         CheckForHoldableObject();
         HandleHoldLogic();
         ModifyHoldableObject();
         DrawSplineBetweenObjectAndGun();
 
-
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            Instantiate(objectPrefab, transform.position + transform.up * 2, Quaternion.identity);
+            Instantiate(objectPrefab, transform.position + transform.right * 2, Quaternion.identity);
         }
     }
+    
+
 
     private void InitializeLineRenderer()
     {
@@ -85,13 +86,23 @@ public class ScaleGun : MonoBehaviour
         _lineRenderer.SetPosition(0, startPosition);
         _lineRenderer.SetPosition(1, endPosition);
     }
+    
+    private void DrawLineToRight()
+    {
+        Vector3 startPosition = transform.position;
+        Vector3 direction = transform.right;
+        Vector3 endPosition = startPosition + direction * _currentLineLength;
+
+        _lineRenderer.SetPosition(0, startPosition);
+        _lineRenderer.SetPosition(1, endPosition);
+    }
 
     private void CheckForHoldableObject()
     {
         if (_isHoldingObject) return; // Prevent picking up another object if one is already held
 
         int holdableLayerMask = LayerMask.GetMask("HoldableObject");
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, _currentLineLength, holdableLayerMask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, _currentLineLength, holdableLayerMask);
 
         if (hit.collider != null)
         {
@@ -245,7 +256,7 @@ public class ScaleGun : MonoBehaviour
     {
         _currentLineLength = Mathf.Max(_currentLineLength - lengthGrowSpeed * Time.deltaTime, 0f);
     }
-    
+
     private void DisableSplineRenderer()
     {
         _splineRenderer.positionCount = 0;
