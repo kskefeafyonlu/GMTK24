@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 525942395}
   - component: {fileID: 525942399}
   - component: {fileID: 525942398}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HoldableObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}

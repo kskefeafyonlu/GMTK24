@@ -112,7 +112,8 @@ public class ScaleGun : MonoBehaviour
     // Check if there is a holdable object in the line's path
     private void CheckForHoldableObject()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, _currentLineLength); // Adjust the length as needed
+        int holdableLayerMask = LayerMask.GetMask("HoldableObject");
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, _currentLineLength, holdableLayerMask); // Adjust the length as needed
 
         if (hit.collider != null)
         {
