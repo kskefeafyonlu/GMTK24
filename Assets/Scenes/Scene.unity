@@ -190,15 +190,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 990205408}
   tiles:
-  - {fileID: 11400000, guid: ae68d965a4218a94ca2134f0ae2007c4, type: 2}
-  - {fileID: 11400000, guid: fedab419fdbdeea488795e51c83727c9, type: 2}
-  - {fileID: 11400000, guid: 6a5be8683b2bb5c4cafdd9a8407e5654, type: 2}
-  - {fileID: 11400000, guid: 57b6fab8e8adf24478f260a85ba4fa71, type: 2}
-  - {fileID: 11400000, guid: 0cb9748ff72f7c74ab513387ceba11ad, type: 2}
-  - {fileID: 11400000, guid: 4c8943e2da4e8964bb3eb170c1aaba9f, type: 2}
-  - {fileID: 11400000, guid: 4c8943e2da4e8964bb3eb170c1aaba9f, type: 2}
-  - {fileID: 11400000, guid: 8143e435c2ff5f342951e4e9991c11ea, type: 2}
-  - {fileID: 11400000, guid: 8743c8559250174429e1d0c2e08b2e77, type: 2}
+  - {fileID: 11400000, guid: 2e715dcbb45c48e4d9edc5388c3cb843, type: 2}
+  - {fileID: 11400000, guid: 25a60087107f41744a7bb36a66e7debb, type: 2}
+  - {fileID: 11400000, guid: 2e715dcbb45c48e4d9edc5388c3cb843, type: 2}
+  - {fileID: 11400000, guid: b567da8c2ddf479478b638b8247b92cb, type: 2}
+  - {fileID: 11400000, guid: e2df5982c4d06514eb033a9634cc0037, type: 2}
+  - {fileID: 11400000, guid: b567da8c2ddf479478b638b8247b92cb, type: 2}
+  - {fileID: 11400000, guid: 2e715dcbb45c48e4d9edc5388c3cb843, type: 2}
+  - {fileID: 11400000, guid: b567da8c2ddf479478b638b8247b92cb, type: 2}
+  - {fileID: 11400000, guid: 3a7c07f439e185f4787d6021f51b70eb, type: 2}
   player: {fileID: 5403352968331038715}
   renderRadius: 20
 --- !u!4 &67423333
