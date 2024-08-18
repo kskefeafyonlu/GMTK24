@@ -43,15 +43,8 @@ public class ScaleGun : MonoBehaviour
     }
 
     private void Update()
-    {
-        if (PlayerMovement.isFacingRight) // Assuming you have a way to check if the gun is facing right
-        {
-            DrawLineToRight();
-        }
-        else
-        {
-            DrawLineToLeft();
-        }
+    { 
+        DrawLineToRight();
         CheckForHoldableObject();
         HandleHoldLogic();
         ModifyHoldableObject();

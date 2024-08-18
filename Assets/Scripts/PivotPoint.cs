@@ -2,30 +2,35 @@ using UnityEngine;
 
 public class PivotPoint : MonoBehaviour
 {
+    public GameObject orbObject;
     private Camera _mainCam;
-    public float rotationSpeed = 5f;
-    private PlayerMovement _playerMovement;
-    private void Awake()
+    private Vector3 _mousePosition;
+    public float rotationSpeed = 5f; // Speed at which the pivot rotates
+
+    void Start()
     {
         _mainCam = Camera.main;
-        _playerMovement = GetComponentInParent<PlayerMovement>();
-    }
-    private void FixedUpdate()
-    {
-        LookAtMouse();
     }
 
-    private void LookAtMouse()
+    void Update()
     {
-        Vector2 mouseWorldPosition = _mainCam.ScreenToWorldPoint(Input.mousePosition);
-        float targetAngle = Mathf.Atan2(mouseWorldPosition.y - transform.position.y, mouseWorldPosition.x - transform.position.x) * Mathf.Rad2Deg;
+        _mousePosition = _mainCam.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 rotateDirection = _mousePosition - transform.position;
 
-        if (!_playerMovement.isFacingRight)
+        float targetRotationZ = Mathf.Atan2(rotateDirection.y, rotateDirection.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.Euler(0f, 0f, targetRotationZ);
+
+        // Interpolate the pivot's rotation towards the target rotation
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        
+        if (transform.localEulerAngles.z > 30 && transform.localEulerAngles.z < 160)
         {
-            targetAngle += 180; // Adjust the angle if the character is facing left
+            orbObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
         }
-
-        Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        else
+        {
+            orbObject.GetComponent<SpriteRenderer>().sortingOrder = 99;
+        }
     }
 }
