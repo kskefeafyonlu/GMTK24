@@ -2,7 +2,8 @@ using UnityEngine;
 public class ScaleGun : MonoBehaviour
 {
     public PlayerMovement playerMovement;
-
+    private Camera _mainCam;
+    
     public Material lineMaterial;
     public Material splineMaterial;
     public HoldableObject hitHoldableObject;
@@ -29,6 +30,7 @@ public class ScaleGun : MonoBehaviour
 
     private void Awake()
     {
+        _mainCam = Camera.main;
         playerMovement = GetComponentInParent<PlayerMovement>();
 
         InitializeLineRenderer();
@@ -58,11 +60,16 @@ public class ScaleGun : MonoBehaviour
             _isHoldingObject = false;
             _isInHoldMode = false;
 
+            // Calculate the direction towards the mouse position
+            Vector3 mousePosition = _mainCam.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 direction = (mousePosition - hitHoldableObject.transform.position).normalized;
+
             // Apply shooting logic
             Rigidbody2D rb = hitHoldableObject.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                rb.velocity = transform.right * 10f; // Set bullet speed
+                float force = 10f / hitHoldableObject.Mass; // Adjust the force based on mass
+                rb.velocity = direction * force * _objectVelocity.magnitude; // Apply force in the direction of the mouse position
             }
 
             // Clear the reference to the holdable object
@@ -118,7 +125,6 @@ public class ScaleGun : MonoBehaviour
             hitHoldableObject = null;
         }
     }
-
     private void HandleHoldLogic()
     {
         if (Input.GetMouseButtonDown(0))
@@ -147,13 +153,15 @@ public class ScaleGun : MonoBehaviour
             _isHoldingObject = false;
             _isInHoldMode = false;
             DecreaseLineLength();
-            if (hitHoldableObject != null)
-            {
-                ApplyMomentum();
-                ResetLineRenderer();
-                DisableSplineRenderer();
-                Shoot(); // Call Shoot method when left mouse button is released
-            }
+            ResetLineRenderer();
+            DisableSplineRenderer();
+        }
+
+        if (Input.GetMouseButtonDown(1)) // Right mouse button
+        {
+            Shoot();
+            ResetLineRenderer();
+            DisableSplineRenderer();
         }
     }
 
@@ -187,7 +195,6 @@ public class ScaleGun : MonoBehaviour
         _objectVelocity = (hitHoldableObject.transform.position - _lastPosition) / Time.deltaTime;
         _lastPosition = hitHoldableObject.transform.position;
     }
-
     private void ApplyMomentum()
     {
         if (hitHoldableObject != null)
