@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     public bool isFacingRight = true; // Track the character's facing direction
     private SpriteRenderer _spriteRenderer;
 
+    private static readonly int SpeedHash = Animator.StringToHash("Speed");
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -19,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         ProcessInputs();
-        animator.SetFloat("Speed", _moveDirection.magnitude);
+        animator.SetFloat(SpeedHash, _moveDirection.magnitude);
     }
 
     void FixedUpdate()

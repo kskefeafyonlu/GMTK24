@@ -24,13 +24,10 @@ public class PivotPoint : MonoBehaviour
 
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         
-        if (transform.localEulerAngles.z > 30 && transform.localEulerAngles.z < 160)
-        {
-            orbObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
-        }
-        else
-        {
-            orbObject.GetComponent<SpriteRenderer>().sortingOrder = 99;
-        }
+        // Set the orb object's sorting order based on the pivot's rotation according to the players sorting order
+        int parentSortingOrder = GetComponentInParent<SpriteRenderer>().sortingOrder;
+        orbObject.GetComponent<SpriteRenderer>().sortingOrder = (transform.localEulerAngles.z > 30 && transform.localEulerAngles.z < 160) 
+            ? parentSortingOrder - 1 
+            : parentSortingOrder + 1;
     }
 }

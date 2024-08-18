@@ -12866,13 +12866,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71253c19830095043923935922387fd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerMovement: {fileID: 0}
+  playerMovement: {fileID: 0}
   lineMaterial: {fileID: 2100000, guid: 23138182c8c50894c8dbd50cc58da8b5, type: 2}
   splineMaterial: {fileID: 2100000, guid: 23138182c8c50894c8dbd50cc58da8b5, type: 2}
   hitHoldableObject: {fileID: 0}
-  SlerpSpeed: 5
+  slerpSpeed: 5
   initialLength: 0
-  lengthChangeSpeed: 1
   maxLineLength: 10
   scaleChangeSpeed: 1
   lengthGrowSpeed: 5
@@ -13280,7 +13279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 5403352968331038715}
-  smoothSpeed: 0.0075
+  smoothSpeed: 1
   offset: {x: 0, y: 0, z: 0}
 --- !u!1 &1805798597 stripped
 GameObject:
