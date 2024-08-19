@@ -122,7 +122,9 @@ public class EnemySpawner : MonoBehaviour
                 break;
         }
 
-        return transform.position + spawnPosition;
+        Vector3 offset = transform.position;
+        offset.z = 0;
+        return  offset + spawnPosition;
     }
 }
 
