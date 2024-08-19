@@ -1,9 +1,12 @@
 using UnityEngine;
+
 public class ScaleGun : MonoBehaviour
 {
+    public Upgrades upgrades;
+
     public PlayerMovement playerMovement;
     private Camera _mainCam;
-    
+
     public Material lineMaterial;
     public Material splineMaterial;
     public HoldableObject hitHoldableObject;
@@ -38,6 +41,11 @@ public class ScaleGun : MonoBehaviour
         _currentLineLength = initialLength;
     }
 
+    private void Start()
+    {
+        UpdateUpgradeValues();
+    }
+
     private void Update()
     {
         DrawLineToRight();
@@ -50,32 +58,31 @@ public class ScaleGun : MonoBehaviour
         {
             Instantiate(objectPrefab, transform.position + transform.right * 2, Quaternion.identity);
         }
+        
+        UpdateUpgradeValues();
     }
 
     private void Shoot()
     {
         if (hitHoldableObject != null)
         {
-            // Release the object
             _isHoldingObject = false;
             _isInHoldMode = false;
 
-            // Calculate the direction towards the mouse position
             Vector3 mousePosition = _mainCam.ScreenToWorldPoint(Input.mousePosition);
             Vector3 direction = (mousePosition - hitHoldableObject.transform.position).normalized;
 
-            // Apply shooting logic
             Rigidbody2D rb = hitHoldableObject.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                float force = 10f / hitHoldableObject.Mass; // Adjust the force based on mass
-                rb.velocity = direction * force * _objectVelocity.magnitude; // Apply force in the direction of the mouse position
+                float force = upgrades.UpgradesUI[2].Points; // Use upgrade points for throw force
+                rb.velocity = direction * force * _objectVelocity.magnitude;
             }
 
-            // Clear the reference to the holdable object
             hitHoldableObject = null;
         }
     }
+
     private void InitializeLineRenderer()
     {
         _lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -87,6 +94,7 @@ public class ScaleGun : MonoBehaviour
 
         _lineRenderer.transform.SetParent(transform);
     }
+
     private void InitializeSplineRenderer()
     {
         _splineObject = new GameObject("SplineRenderer");
@@ -107,13 +115,13 @@ public class ScaleGun : MonoBehaviour
         _lineRenderer.SetPosition(0, startPosition);
         _lineRenderer.SetPosition(1, endPosition);
     }
+
     private void CheckForHoldableObject()
     {
-        if (_isHoldingObject) return; // Prevent picking up another object if one is already held
+        if (_isHoldingObject) return;
 
         int holdableLayerMask = LayerMask.GetMask("HoldableObject");
-        RaycastHit2D hit =
-            Physics2D.Raycast(transform.position, transform.right, _currentLineLength, holdableLayerMask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, _currentLineLength, holdableLayerMask);
 
         if (hit.collider != null)
         {
@@ -125,6 +133,7 @@ public class ScaleGun : MonoBehaviour
             hitHoldableObject = null;
         }
     }
+
     private void HandleHoldLogic()
     {
         if (Input.GetMouseButtonDown(0))
@@ -145,7 +154,7 @@ public class ScaleGun : MonoBehaviour
             }
 
             IncreaseLineLength();
-            SetLineColor(Color.white, Color.cyan); // Set the line color to cyan when holding an object
+            SetLineColor(Color.white, Color.cyan);
         }
         else
         {
@@ -157,7 +166,7 @@ public class ScaleGun : MonoBehaviour
             DisableSplineRenderer();
         }
 
-        if (Input.GetMouseButtonDown(1)) // Right mouse button
+        if (Input.GetMouseButtonDown(1))
         {
             Shoot();
             ResetLineRenderer();
@@ -187,7 +196,7 @@ public class ScaleGun : MonoBehaviour
         if (hitHoldableObject == null) return;
 
         Vector3 startPosition = _lineRenderer.GetPosition(0);
-        Vector3 endPosition = startPosition + transform.right * _initialDistanceToPlayer; // Change direction to right
+        Vector3 endPosition = startPosition + transform.right * _initialDistanceToPlayer;
 
         hitHoldableObject.transform.position = Vector3.Lerp(hitHoldableObject.transform.position, endPosition,
             Time.deltaTime * slerpSpeed / hitHoldableObject.Mass);
@@ -195,6 +204,7 @@ public class ScaleGun : MonoBehaviour
         _objectVelocity = (hitHoldableObject.transform.position - _lastPosition) / Time.deltaTime;
         _lastPosition = hitHoldableObject.transform.position;
     }
+
     private void ApplyMomentum()
     {
         if (hitHoldableObject != null)
@@ -221,13 +231,13 @@ public class ScaleGun : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Q) && hitHoldableObject.transform.localScale.x < hitHoldableObject.MaxScale)
         {
-            hitHoldableObject.transform.localScale += scaleChange;
+            hitHoldableObject.transform.localScale += scaleChange * upgrades.UpgradesUI[3].Points; // Use upgrade points for scaling amount
             hitHoldableObject.Mass *= 1 + scaleChange.x;
             _lineRenderer.startColor = Color.green;
         }
         else if (Input.GetKey(KeyCode.E) && hitHoldableObject.transform.localScale.x > hitHoldableObject.MinScale)
         {
-            hitHoldableObject.transform.localScale -= scaleChange;
+            hitHoldableObject.transform.localScale -= scaleChange * upgrades.UpgradesUI[3].Points; // Use upgrade points for scaling amount
             hitHoldableObject.Mass *= 1 - scaleChange.x;
             _lineRenderer.startColor = Color.red;
         }
@@ -241,11 +251,11 @@ public class ScaleGun : MonoBehaviour
     {
         if (hitHoldableObject == null || !_isInHoldMode) return;
 
-        DisableLineRenderer(); // Disable the line renderer when the spline is active
+        DisableLineRenderer();
 
         Vector3 startPosition = transform.position;
         Vector3 endPosition = hitHoldableObject.transform.position;
-        Vector3 controlPoint = startPosition + transform.right * 5; // Change direction to right
+        Vector3 controlPoint = startPosition + transform.right * 5;
 
         int numPoints = 20;
         _splineRenderer.positionCount = numPoints;
@@ -258,7 +268,6 @@ public class ScaleGun : MonoBehaviour
             _splineRenderer.SetPosition(i, pointOnSpline);
         }
     }
-
 
     private void ResetLineRenderer()
     {
@@ -285,6 +294,13 @@ public class ScaleGun : MonoBehaviour
     private void DisableSplineRenderer()
     {
         _splineRenderer.positionCount = 0;
-        EnableLineRenderer(); // Re-enable the line renderer when the spline is disabled
+        EnableLineRenderer();
+    }
+
+    private void UpdateUpgradeValues()
+    {
+        slerpSpeed = upgrades.UpgradesUI[0].Points;
+        maxLineLength = upgrades.UpgradesUI[1].Points;
+        scaleChangeSpeed = upgrades.UpgradesUI[3].Points;
     }
 }

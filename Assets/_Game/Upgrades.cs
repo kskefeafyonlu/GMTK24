@@ -1,32 +1,24 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using TMPro;
 using UnityEngine;
 
 public class Upgrades : MonoBehaviour
 {
-    
     public GameObject UpgradeMenu;
     public List<UpgradeUI> UpgradesUI = new List<UpgradeUI>();
-    
     public int AttributePoints = 10;
     public TextMeshProUGUI AttributePointsText;
-    
-
-
 
     private void Start()
     {
         UpdateUI();
-        foreach(var upgrade in UpgradesUI)
+        foreach (var upgrade in UpgradesUI)
         {
             upgrade.Points = upgrade.MinPoints;
         }
-
     }
-    
+
     public void AddPoint(int index)
     {
         if (AttributePoints > 0 && UpgradesUI[index].Points < UpgradesUI[index].MaxPoints)
@@ -36,35 +28,31 @@ public class Upgrades : MonoBehaviour
             UpdateUI();
         }
     }
-    
+
     public void RemovePoint(int index)
     {
-        if (UpgradesUI[index].Points > UpgradesUI[index].MinPoints) 
+        if (UpgradesUI[index].Points > UpgradesUI[index].MinPoints)
         {
             UpgradesUI[index].RemovePoint();
             AttributePoints++;
             UpdateUI();
         }
     }
-    
+
     private void UpdateUI()
     {
         AttributePointsText.text = AttributePoints.ToString();
-        
-        
         foreach (var upgrade in UpgradesUI)
         {
-            upgrade.PointsText.text = upgrade.Points.ToString();
+            upgrade.UpdatePointsText();
         }
     }
-
 
     public void ToggleUpgradeMenu()
     {
         UpgradeMenu.SetActive(!UpgradeMenu.activeSelf);
     }
 }
-
 
 [System.Serializable]
 public class UpgradeUI
@@ -73,32 +61,46 @@ public class UpgradeUI
     public int MaxPoints;
     public int Points;
     public int MinPoints;
-    
+
     public void AddPoint()
     {
         if (Points < MaxPoints)
         {
             Points++;
-            PointsText.text = Points.ToString();
+            UpdatePointsText();
         }
         else
         {
             Debug.Log("Max points reached");
         }
-        
     }
-    
+
     public void RemovePoint()
     {
         if (Points > MinPoints)
         {
             Points--;
-            PointsText.text = Points.ToString();
+            UpdatePointsText();
         }
         else
         {
             Debug.Log("Min points reached");
         }
     }
-    
+
+    public void UpdatePointsText()
+    {
+        if (Points == MaxPoints)
+        {
+            PointsText.text = "Max";
+        }
+        else if (Points == MinPoints)
+        {
+            PointsText.text = "Min";
+        }
+        else
+        {
+            PointsText.text = Points.ToString();
+        }
+    }
 }
