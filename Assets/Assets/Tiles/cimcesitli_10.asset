@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: cimcesitli_10
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 1386877862, guid: cde4366e362224948be0c1d141ccfdba, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.86348134, g: 1, b: 0.8283019, a: 1}
   m_Transform:
     e00: 1
     e01: 0
