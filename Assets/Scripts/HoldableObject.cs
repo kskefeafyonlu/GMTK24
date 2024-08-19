@@ -8,4 +8,7 @@ public class HoldableObject : MonoBehaviour
     public float MaxScale = 2f;
     public float MinScale = 0.5f;
     
+    public int HP = 2;
+    
+    
 }

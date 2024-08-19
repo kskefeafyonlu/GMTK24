@@ -132,6 +132,12 @@ public class Enemy : MonoBehaviour
             Debug.Log("Calculating damage");
             float damage = CalculateDamage(holdableObject.Mass, other.attachedRigidbody.velocity.magnitude);
             TakeDamage(damage);
+            
+            holdableObject.HP--;
+            if (holdableObject.HP <= 0)
+            {
+                Destroy(other.gameObject);
+            }
         }
     }
 
