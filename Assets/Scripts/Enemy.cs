@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,8 +6,13 @@ public class Enemy : MonoBehaviour
 {
     private Transform _target;
     private Rigidbody2D _rb;
+    private SpriteRenderer _spriteRenderer;
+    private Animator _animator;
 
-    public float movementSpeed = 1f;
+    public float minSpeed = 1f; // Minimum speed for this enemy type
+    public float maxSpeed = 1.5f; // Maximum speed for this enemy type
+    private float movementSpeed; // Actual speed for this enemy instance
+
     public float maxHealth = 100f;
     public float currentHealth;
     private Slider _healthBar;
@@ -14,12 +20,18 @@ public class Enemy : MonoBehaviour
     public int damagePerSecond = 10; // Damage to apply per second
     private float _damageTimer;
 
+    private float _slowdownDuration = 1f; // Duration of the slowdown effect
+    private float _slowdownFactor = 0.5f; // Factor by which the speed is reduced
+
     private void Awake()
     {
         _target = GameObject.FindGameObjectWithTag("Player").transform;
         _rb = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
         _healthBar = GetComponentInChildren<Slider>();
         currentHealth = maxHealth;
+        movementSpeed = Random.Range(minSpeed, maxSpeed); // Assign a random speed within the range
         UpdateUI();
     }
 
@@ -33,6 +45,16 @@ public class Enemy : MonoBehaviour
         Vector2 direction = (Vector2)_target.position - _rb.position;
         direction.Normalize();
         _rb.velocity = direction * movementSpeed;
+
+        // Flip the sprite based on the enemy's position relative to the player
+        if (_target.position.x > transform.position.x)
+        {
+            _spriteRenderer.flipX = false;
+        }
+        else
+        {
+           _spriteRenderer.flipX = true;
+        }
     }
 
     void TakeDamage(float damage)
@@ -42,6 +64,11 @@ public class Enemy : MonoBehaviour
         {
             currentHealth = 0;
             Die();
+        }
+        else
+        {
+            _animator.SetTrigger("OnHit");
+            StartCoroutine(SlowdownEffect());
         }
         UpdateUI();
     }
@@ -111,5 +138,12 @@ public class Enemy : MonoBehaviour
     private float CalculateDamage(float mass, float velocity)
     {
         return mass * velocity * velocity * 0.5f;
+    }
+
+    private IEnumerator SlowdownEffect()
+    {
+        movementSpeed *= _slowdownFactor;
+        yield return new WaitForSeconds(_slowdownDuration);
+        movementSpeed /= _slowdownFactor;
     }
 }
