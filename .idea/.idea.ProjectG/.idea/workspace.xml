@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7d1cf6a-e92c-45bd-a665-2be9cfa079f5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemy.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HoldableObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/HoldableObject.cs" afterDir="false" />
-    </list>
+    <list default="true" id="e7d1cf6a-e92c-45bd-a665-2be9cfa079f5" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -106,7 +103,7 @@
       <workItem from="1724052209339" duration="1251000" />
       <workItem from="1724066736302" duration="1592000" />
       <workItem from="1724081593019" duration="5148000" />
-      <workItem from="1724092807489" duration="1665000" />
+      <workItem from="1724092807489" duration="2000000" />
     </task>
     <servers />
   </component>
