@@ -190,15 +190,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 990205408}
   tiles:
-  - {fileID: 11400000, guid: 2e715dcbb45c48e4d9edc5388c3cb843, type: 2}
-  - {fileID: 11400000, guid: 25a60087107f41744a7bb36a66e7debb, type: 2}
-  - {fileID: 11400000, guid: 2e715dcbb45c48e4d9edc5388c3cb843, type: 2}
-  - {fileID: 11400000, guid: b567da8c2ddf479478b638b8247b92cb, type: 2}
-  - {fileID: 11400000, guid: e2df5982c4d06514eb033a9634cc0037, type: 2}
-  - {fileID: 11400000, guid: b567da8c2ddf479478b638b8247b92cb, type: 2}
-  - {fileID: 11400000, guid: 2e715dcbb45c48e4d9edc5388c3cb843, type: 2}
-  - {fileID: 11400000, guid: b567da8c2ddf479478b638b8247b92cb, type: 2}
-  - {fileID: 11400000, guid: 3a7c07f439e185f4787d6021f51b70eb, type: 2}
+  - {fileID: 11400000, guid: 811257144edd8ae4fa51f6a061cb79f5, type: 2}
+  - {fileID: 11400000, guid: 387d4281065530843be45db518c84c4d, type: 2}
+  - {fileID: 11400000, guid: 916e9d44974ab864ab1a525b3c069194, type: 2}
+  - {fileID: 11400000, guid: 4c0666c6b8fe1a14ea642dbfc6020588, type: 2}
+  - {fileID: 11400000, guid: 0ba03818ded19ec48b744c2b6f2c94e3, type: 2}
+  - {fileID: 11400000, guid: aa723a4b626c003428f30b34e28b3089, type: 2}
+  - {fileID: 11400000, guid: 4c77da0631ac0bb4493c7ffca4e031aa, type: 2}
+  - {fileID: 11400000, guid: 5da5d01dfcb5bb142a5dbc106ae93581, type: 2}
+  - {fileID: 11400000, guid: b1943ef8e069c0c4d9fdaa421469b181, type: 2}
+  - {fileID: 11400000, guid: 55d3baa0afd2e96429a952da84a64798, type: 2}
+  - {fileID: 11400000, guid: 3a6062f25fef6934b80a1001d75afac2, type: 2}
+  - {fileID: 11400000, guid: 4bec032dca16bd843816354e1dd52c36, type: 2}
+  - {fileID: 11400000, guid: cbca6fcba29bec341ba4bdb0bc50ed28, type: 2}
+  - {fileID: 11400000, guid: 3f14f148f13b63447a19bfc6774c9f18, type: 2}
+  - {fileID: 11400000, guid: a72da9e832ddbf64787b586265286c61, type: 2}
+  - {fileID: 11400000, guid: c403758e899e6c74ba26e97c76d2116b, type: 2}
   player: {fileID: 5403352968331038715}
   renderRadius: 20
 --- !u!4 &67423333
@@ -1526,7 +1533,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.2010875, y: 4.6}
+    oldSize: {x: 3.2, y: 4.6}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
