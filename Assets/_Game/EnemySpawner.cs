@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-
 public class EnemySpawner : MonoBehaviour
 {
+    private Upgrades _upgrades;
+
     private Wave _currentWave;
     public List<Wave> Waves;
     public float GraceTimeBetweenWaves = 5f;
@@ -17,6 +18,7 @@ public class EnemySpawner : MonoBehaviour
     private void Awake()
     {
         _headerText = GameObject.Find("HeaderText").GetComponent<TextMeshProUGUI>();
+        _upgrades = FindObjectOfType<Upgrades>(); // Find the Upgrades component in the scene
     }
 
     private void Start()
@@ -47,7 +49,19 @@ public class EnemySpawner : MonoBehaviour
             while (AreEnemiesRemaining())
             {
                 _headerText.text = $"Enemies remaining: {GameObject.FindGameObjectsWithTag("Enemy").Length}";
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.3f);
+            }
+
+            _upgrades.AddAttributePoints(2);
+            
+            
+
+            _upgrades.ToggleUpgradeMenu(); // Toggle the upgrade menu when a wave is finished
+
+            // Wait for the upgrade menu to be turned off
+            while (_upgrades.UpgradeMenu.activeSelf)
+            {
+                yield return null;
             }
 
             _timeUntilNextWave = GraceTimeBetweenWaves;
@@ -56,6 +70,12 @@ public class EnemySpawner : MonoBehaviour
                 _headerText.text = $"Next wave in {_timeUntilNextWave:0.0} seconds";
                 yield return new WaitForSeconds(0.1f);
                 _timeUntilNextWave -= 0.1f;
+            }
+
+            // Wait for the upgrade menu to be turned off
+            while (_upgrades.UpgradeMenu.activeSelf)
+            {
+                yield return null;
             }
 
             waveIndex++;
@@ -95,28 +115,28 @@ public class EnemySpawner : MonoBehaviour
             case 0: //top
                 spawnPosition = new Vector3(
                     UnityEngine.Random.Range(-cameraWidth + spawnPadding, cameraWidth - spawnPadding),
-                    cameraHeight + spawnPadding, 
+                    cameraHeight + spawnPadding,
                     0
                 );
                 break;
             case 1: //right
                 spawnPosition = new Vector3(
                     cameraWidth + spawnPadding,
-                    UnityEngine.Random.Range(-cameraHeight + spawnPadding, cameraHeight - spawnPadding), 
+                    UnityEngine.Random.Range(-cameraHeight + spawnPadding, cameraHeight - spawnPadding),
                     0
                 );
                 break;
             case 2: //bottom
                 spawnPosition = new Vector3(
                     UnityEngine.Random.Range(-cameraWidth + spawnPadding, cameraWidth - spawnPadding),
-                    -cameraHeight - spawnPadding, 
+                    -cameraHeight - spawnPadding,
                     0
                 );
                 break;
             case 3: //left
                 spawnPosition = new Vector3(
                     -cameraWidth - spawnPadding,
-                    UnityEngine.Random.Range(-cameraHeight + spawnPadding, cameraHeight - spawnPadding), 
+                    UnityEngine.Random.Range(-cameraHeight + spawnPadding, cameraHeight - spawnPadding),
                     0
                 );
                 break;

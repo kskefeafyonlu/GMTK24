@@ -7,9 +7,11 @@ public class Upgrades : MonoBehaviour
 {
     public GameObject UpgradeMenu;
     public List<UpgradeUI> UpgradesUI = new List<UpgradeUI>();
-    public int AttributePoints = 10;
+    public int AttributePoints = 0;
     public TextMeshProUGUI AttributePointsText;
 
+    
+    
     private void Start()
     {
         UpdateUI();
@@ -17,6 +19,12 @@ public class Upgrades : MonoBehaviour
         {
             upgrade.Points = upgrade.MinPoints;
         }
+    }
+    
+    public void AddAttributePoints(int points)
+    {
+        AttributePoints += points;
+        UpdateUI();
     }
 
     public void AddPoint(int index)

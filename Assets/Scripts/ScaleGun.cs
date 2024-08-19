@@ -10,11 +10,13 @@ public class ScaleGun : MonoBehaviour
     public Material lineMaterial;
     public Material splineMaterial;
     public HoldableObject hitHoldableObject;
+    
     public float slerpSpeed = 5f;
     public float initialLength;
     public float maxLineLength = 10f;
     public float scaleChangeSpeed = 1f;
     public float lengthGrowSpeed = 5f;
+    public float shootForceSpeed = 5f;
 
     private LineRenderer _lineRenderer;
     private LineRenderer _splineRenderer;
@@ -26,6 +28,8 @@ public class ScaleGun : MonoBehaviour
     private float _currentLineLength;
     private Vector3 _lastPosition;
     private Vector3 _objectVelocity;
+    private float throwForce;
+
 
     private float _initialDistanceToPlayer;
 
@@ -63,25 +67,26 @@ public class ScaleGun : MonoBehaviour
     }
 
     private void Shoot()
+{
+    if (hitHoldableObject != null)
     {
-        if (hitHoldableObject != null)
+        _isHoldingObject = false;
+        _isInHoldMode = false;
+
+        Vector3 mousePosition = _mainCam.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 direction = (mousePosition - hitHoldableObject.transform.position).normalized;
+
+        Rigidbody2D rb = hitHoldableObject.GetComponent<Rigidbody2D>();
+        if (rb != null)
         {
-            _isHoldingObject = false;
-            _isInHoldMode = false;
-
-            Vector3 mousePosition = _mainCam.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 direction = (mousePosition - hitHoldableObject.transform.position).normalized;
-
-            Rigidbody2D rb = hitHoldableObject.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                float force = upgrades.UpgradesUI[2].Points; // Use upgrade points for throw force
-                rb.velocity = direction * force * _objectVelocity.magnitude;
-            }
-
-            hitHoldableObject = null;
+            throwForce = upgrades.UpgradesUI[2].Points * shootForceSpeed; // Use upgrade points for throw force
+            rb.velocity = direction * throwForce * _objectVelocity.magnitude;
         }
+
+        hitHoldableObject = null;
     }
+}
+    
 
     private void InitializeLineRenderer()
     {
@@ -191,6 +196,8 @@ public class ScaleGun : MonoBehaviour
         _lastPosition = hitHoldableObject.transform.position;
     }
 
+
+    private float affectingSlerpSpeed = 1;
     private void ControlHoldableObject()
     {
         if (hitHoldableObject == null) return;
@@ -281,6 +288,8 @@ public class ScaleGun : MonoBehaviour
         _currentLineLength = initialLength;
     }
 
+    
+    private float affectingMaxLineLength = 1;
     private void IncreaseLineLength()
     {
         _currentLineLength = Mathf.Min(_currentLineLength + lengthGrowSpeed * Time.deltaTime, maxLineLength);
@@ -299,8 +308,10 @@ public class ScaleGun : MonoBehaviour
 
     private void UpdateUpgradeValues()
     {
-        slerpSpeed = upgrades.UpgradesUI[0].Points;
-        maxLineLength = upgrades.UpgradesUI[1].Points;
+        
+        affectingSlerpSpeed = upgrades.UpgradesUI[0].Points * slerpSpeed;
+        affectingMaxLineLength = upgrades.UpgradesUI[1].Points * maxLineLength;
         scaleChangeSpeed = upgrades.UpgradesUI[3].Points;
+        
     }
 }
