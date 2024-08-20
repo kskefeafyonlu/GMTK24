@@ -31,4 +31,10 @@ public class SceneManager : MonoBehaviour
         mainMenuUI.SetActive(!mainMenuUI.activeSelf);
         settingsUI.SetActive(!settingsUI.activeSelf);
     }
+
+    public void ReloadCurrentScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
 }
+

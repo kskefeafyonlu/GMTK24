@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
+    public GameObject gameOverUI;
+    
     public AudioClip deathSound;
     public AudioClip hitSound;
 
@@ -98,6 +100,20 @@ public class PlayerHealth : MonoBehaviour
         if (deathSound != null)
         {
             _audioSource.PlayOneShot(deathSound);
+        }
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(true);
+        }
+        KillAllEnemies();
+    }
+    
+    private void KillAllEnemies()
+    {
+        Enemy[] enemies = FindObjectsOfType<Enemy>();
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.TakeDamage(9999);
         }
     }
 
