@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7d1cf6a-e92c-45bd-a665-2be9cfa079f5" name="Changes" comment="" />
+    <list default="true" id="e7d1cf6a-e92c-45bd-a665-2be9cfa079f5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/_Game/UI/SceneManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Game/UI/SceneManager.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -106,6 +108,7 @@
       <workItem from="1724092807489" duration="2598000" />
       <workItem from="1724136716769" duration="871000" />
       <workItem from="1724145655104" duration="2651000" />
+      <workItem from="1724165911725" duration="301000" />
     </task>
     <servers />
   </component>

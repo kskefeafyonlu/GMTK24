@@ -12,8 +12,15 @@ public class SceneManager : MonoBehaviour
 
     private void Awake()
     {
-        mainMenuUI.SetActive(true);
-        settingsUI.SetActive(false);
+        if (mainMenuUI != null)
+        {
+            mainMenuUI.SetActive(true);
+        }
+
+        if (settingsUI != null)
+        {
+            settingsUI.SetActive(false);
+        }
     }
     
     private void Update()
