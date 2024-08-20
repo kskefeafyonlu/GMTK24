@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4419114347567641358}
   - component: {fileID: 395461101035819700}
   m_Layer: 6
-  m_Name: HoldableObject 1
+  m_Name: Barrel
   m_TagString: HoldableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300066, guid: 29c9cded5e558164aaf8c9bf08aa1510, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -102,6 +102,8 @@ MonoBehaviour:
   Mass: 3
   MaxScale: 2
   MinScale: 0.5
+  HP: 2
+  isCampfire: 0
 --- !u!50 &4419114347567641358
 Rigidbody2D:
   serializedVersion: 4

@@ -1,5 +1,4 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,21 +9,25 @@ public class Enemy : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private Animator _animator;
 
-    public float minSpeed = 1f; // Minimum speed for this enemy type
-    public float maxSpeed = 1.5f; // Maximum speed for this enemy type
-    private float movementSpeed; // Actual speed for this enemy instance
+    public float minSpeed = 1f;
+    public float maxSpeed = 1.5f;
+    private float movementSpeed;
 
     public float maxHealth = 100f;
     public float currentHealth;
     private Slider _healthBar;
 
-    public int damagePerSecond = 10; // Damage to apply per second
+    public int damagePerSecond = 10;
     private float _damageTimer;
 
-    private float _slowdownDuration = 1f; // Duration of the slowdown effect
-    private float _slowdownFactor = 0.5f; // Factor by which the speed is reduced
+    private float _slowdownDuration = 1f;
+    private float _slowdownFactor = 0.5f;
 
     public GameObject floatingTextPrefab;
+
+    private bool _isInCampfire;
+    private float _campfireDamageTimer;
+
     private void Awake()
     {
         floatingTextPrefab = Resources.Load<GameObject>("FloatingText");
@@ -34,8 +37,21 @@ public class Enemy : MonoBehaviour
         _animator = GetComponent<Animator>();
         _healthBar = GetComponentInChildren<Slider>();
         currentHealth = maxHealth;
-        movementSpeed = Random.Range(minSpeed, maxSpeed); // Assign a random speed within the range
+        movementSpeed = Random.Range(minSpeed, maxSpeed);
         UpdateUI();
+    }
+
+    private void Update()
+    {
+        if (_isInCampfire)
+        {
+            _campfireDamageTimer += Time.deltaTime;
+            if (_campfireDamageTimer >= 1f)
+            {
+                TakeDamage(15);
+                _campfireDamageTimer = 0f;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -49,14 +65,13 @@ public class Enemy : MonoBehaviour
         direction.Normalize();
         _rb.velocity = direction * movementSpeed;
 
-        // Flip the sprite based on the enemy's position relative to the player
         if (_target.position.x > transform.position.x)
         {
             _spriteRenderer.flipX = false;
         }
         else
         {
-           _spriteRenderer.flipX = true;
+            _spriteRenderer.flipX = true;
         }
     }
 
@@ -76,8 +91,7 @@ public class Enemy : MonoBehaviour
         UpdateUI();
         ShowFloatingText(damage);
     }
-    
-// Enemy.cs
+
     private void ShowFloatingText(float damage)
     {
         if (floatingTextPrefab != null)
@@ -90,7 +104,6 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-    
 
     private void Die()
     {
@@ -106,18 +119,35 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Hit by player");
             if (other.gameObject.TryGetComponent<PlayerHealth>(out var playerHealth))
             {
                 playerHealth.TakeDamage(10);
-                _animator.SetTrigger("Attack"); // Trigger attack animation
+                _animator.SetTrigger("Attack");
             }
         }
         else if (other.gameObject.CompareTag("HoldableObject"))
         {
-            Debug.Log("Hit by holdable object");
             CalculateDamageFromObject(other);
             SlowDownObject(other);
+
+            if (other.gameObject.TryGetComponent<HoldableObject>(out var holdableObject) && holdableObject.isCampfire)
+            {
+                _isInCampfire = true;
+                _campfireDamageTimer = 0f;
+                holdableObject.AddEnemy(this);
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("HoldableObject"))
+        {
+            if (other.gameObject.TryGetComponent<HoldableObject>(out var holdableObject) && holdableObject.isCampfire)
+            {
+                _isInCampfire = false;
+                holdableObject.RemoveEnemy(this);
+            }
         }
     }
 
@@ -132,7 +162,7 @@ public class Enemy : MonoBehaviour
                 {
                     playerHealth.TakeDamage(damagePerSecond);
                     _damageTimer = 0f;
-                    _animator.SetTrigger("Attack"); // Trigger attack animation
+                    _animator.SetTrigger("Attack");
                 }
             }
         }
@@ -142,7 +172,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.attachedRigidbody != null)
         {
-            other.attachedRigidbody.velocity *= 0.7f; // Reduce the velocity by half
+            other.attachedRigidbody.velocity *= 0.7f;
         }
     }
 
@@ -150,10 +180,9 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent<HoldableObject>(out var holdableObject) && other.attachedRigidbody != null)
         {
-            Debug.Log("Calculating damage");
             float damage = CalculateDamage(holdableObject.Mass, other.attachedRigidbody.velocity.magnitude);
             TakeDamage(damage);
-            
+
             holdableObject.HP--;
             if (holdableObject.HP <= 0)
             {

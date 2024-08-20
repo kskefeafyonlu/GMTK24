@@ -155,7 +155,16 @@ public class ScaleGun : MonoBehaviour
 
             if (_isHoldingObject)
             {
-                ControlHoldableObject();
+                if (hitHoldableObject.isCampfire)
+                {
+                    // Skip movement logic for campfire
+                    ModifyHoldableObject();
+                }
+                else
+                {
+                    ControlHoldableObject();
+                    ModifyHoldableObject();
+                }
             }
 
             IncreaseLineLength();
