@@ -3,8 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class PlayerMovement : MonoBehaviour
 {
-
-    
     public Animator animator;
     public float moveSpeed;
     public GameObject playerGun;
@@ -19,6 +17,11 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // Set the player to ignore collisions with a specific layer
+        int playerLayer = LayerMask.NameToLayer("Player");
+        int ignoreLayer = LayerMask.NameToLayer("HoldableObject"); // Replace "IgnoreLayer" with the actual layer name
+        Physics2D.IgnoreLayerCollision(playerLayer, ignoreLayer, true);
     }
 
     void Update()

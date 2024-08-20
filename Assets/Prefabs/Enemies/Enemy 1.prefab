@@ -291,9 +291,9 @@ MonoBehaviour:
   deathSound: {fileID: 8300000, guid: 032da79317a9ad84aa74a6dec380fa7b, type: 3}
   attackSound: {fileID: 8300000, guid: 054926b325e2cdd4985795e6d0749752, type: 3}
   hitSound: {fileID: 8300000, guid: 20ff37de447e0394e9984f527757e9e6, type: 3}
-  walkSound: {fileID: 8300000, guid: 0e9a725de250a5c4a9acbd9bf0608a8e, type: 3}
+  walkSound: {fileID: 0}
   minSpeed: 1
-  maxSpeed: 1.5
+  maxSpeed: 2
   maxHealth: 100
   currentHealth: 0
   damagePerSecond: 10
@@ -393,7 +393,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.15
+  m_Volume: 0.03
   m_Pitch: 1
   Loop: 0
   Mute: 0
