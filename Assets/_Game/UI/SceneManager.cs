@@ -12,14 +12,8 @@ public class SceneManager : MonoBehaviour
 
     private void Awake()
     {
-        if (mainMenuUI != null)
-        {
-            mainMenuUI.SetActive(true);
-        }
-        if (settingsUI != null)
-        {
-            settingsUI.SetActive(false);
-        }
+        mainMenuUI.SetActive(true);
+        settingsUI.SetActive(false);
     }
 
     public void LoadScene(string sceneName)
@@ -34,11 +28,8 @@ public class SceneManager : MonoBehaviour
 
     public void ToggleSettings()
     {
-        if (mainMenuUI != null && settingsUI != null)
-        {
-            mainMenuUI.SetActive(!mainMenuUI.activeSelf);
-            settingsUI.SetActive(!settingsUI.activeSelf);
-        }
+        mainMenuUI.SetActive(!mainMenuUI.activeSelf);
+        settingsUI.SetActive(!settingsUI.activeSelf);
     }
 
     public void ReloadCurrentScene()

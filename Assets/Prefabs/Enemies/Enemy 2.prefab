@@ -291,9 +291,9 @@ MonoBehaviour:
   deathSound: {fileID: 8300000, guid: 032da79317a9ad84aa74a6dec380fa7b, type: 3}
   attackSound: {fileID: 8300000, guid: 80c4f4a2b5702354fbdc1529b57671ed, type: 3}
   hitSound: {fileID: 8300000, guid: 20ff37de447e0394e9984f527757e9e6, type: 3}
-  walkSound: {fileID: 0}
-  minSpeed: 2.5
-  maxSpeed: 3.5
+  walkSound: {fileID: 8300000, guid: 8892eb1bc509fa24aa7444ad7bc7b526, type: 3}
+  minSpeed: 1
+  maxSpeed: 1.5
   maxHealth: 100
   currentHealth: 0
   damagePerSecond: 10
