@@ -133,8 +133,16 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        Destroy(gameObject);
+        _animator.Play("Die");  // Play the Die animation immediately
+        StartCoroutine(DeathAnimation());  // Start a coroutine to wait for the animation to finish
     }
+
+    private IEnumerator DeathAnimation()
+    {
+        yield return new WaitForSeconds(_animator.GetCurrentAnimatorStateInfo(0).length);  // Wait for the current animation to finish
+        Destroy(gameObject);  // Destroy the game object after the animation
+    }
+
 
     private void UpdateUI()
     {
