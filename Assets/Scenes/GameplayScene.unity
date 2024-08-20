@@ -7149,15 +7149,15 @@ MonoBehaviour:
   UpgradeMenu: {fileID: 2094052364}
   UpgradesUI:
   - PointsText: {fileID: 1074751405}
-    MaxPoints: 3
+    MaxPoints: 10
     Points: 1
     MinPoints: 1
   - PointsText: {fileID: 433997472}
-    MaxPoints: 4
+    MaxPoints: 10
     Points: 1
     MinPoints: 1
   - PointsText: {fileID: 630190263}
-    MaxPoints: 5
+    MaxPoints: 10
     Points: 1
     MinPoints: 1
   - PointsText: {fileID: 1181480536}
@@ -7182,7 +7182,8 @@ MonoBehaviour:
   - {fileID: 6766211124129480591, guid: 68f0cc6d08ecc1f4e9bcf7eee93f024a, type: 3}
   - {fileID: 4586314487829833615, guid: 40509550593085841baebf835e04287c, type: 3}
   - {fileID: 6184032700748008884, guid: 86b7eabdfb8fa8d4aa66fb7c8e15a2de, type: 3}
-  spawnInterval: 5
+  - {fileID: 4586314487829833615, guid: b66322a43db98ac40adc3ca9bb39fb05, type: 3}
+  spawnInterval: 4
   minDistance: 6
   maxAttempts: 5
 --- !u!114 &1966447136
