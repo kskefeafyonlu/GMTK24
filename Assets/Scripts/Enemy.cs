@@ -23,7 +23,6 @@ public class Enemy : MonoBehaviour
 
     public float maxHealth = 100f;
     public float currentHealth;
-    private Slider _healthBar;
 
     public int damagePerSecond = 10;
     private float _damageTimer;
@@ -44,7 +43,6 @@ public class Enemy : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
-        _healthBar = GetComponentInChildren<Slider>();
         currentHealth = maxHealth;
         movementSpeed = Random.Range(minSpeed, maxSpeed);
         UpdateUI();
@@ -67,7 +65,10 @@ public class Enemy : MonoBehaviour
         {
             if (walkSound != null)
             {
-                _audioSource.PlayOneShot(walkSound, 0.5f); // Adjust volume as needed
+                if (_audioSource != null)
+                {
+                    _audioSource.PlayOneShot(walkSound, 0.5f); // Adjust volume as needed
+                }
             }
         }
     }
@@ -146,7 +147,6 @@ public class Enemy : MonoBehaviour
 
     private void UpdateUI()
     {
-        _healthBar.value = currentHealth / maxHealth;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
