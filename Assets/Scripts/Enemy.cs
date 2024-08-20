@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,8 +24,10 @@ public class Enemy : MonoBehaviour
     private float _slowdownDuration = 1f; // Duration of the slowdown effect
     private float _slowdownFactor = 0.5f; // Factor by which the speed is reduced
 
+    public GameObject floatingTextPrefab;
     private void Awake()
     {
+        floatingTextPrefab = Resources.Load<GameObject>("FloatingText");
         _target = GameObject.FindGameObjectWithTag("Player").transform;
         _rb = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -71,7 +74,23 @@ public class Enemy : MonoBehaviour
             StartCoroutine(SlowdownEffect());
         }
         UpdateUI();
+        ShowFloatingText(damage);
     }
+    
+// Enemy.cs
+    private void ShowFloatingText(float damage)
+    {
+        if (floatingTextPrefab != null)
+        {
+            GameObject floatingTextInstance = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity);
+            FloatingText floatingText = floatingTextInstance.GetComponent<FloatingText>();
+            if (floatingText != null)
+            {
+                floatingText.Initialize(damage);
+            }
+        }
+    }
+    
 
     private void Die()
     {

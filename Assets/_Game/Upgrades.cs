@@ -102,10 +102,6 @@ public class UpgradeUI
         {
             PointsText.text = "Max";
         }
-        else if (Points == MinPoints)
-        {
-            PointsText.text = "Min";
-        }
         else
         {
             PointsText.text = Points.ToString();
