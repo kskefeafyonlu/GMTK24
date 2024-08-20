@@ -3,6 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class PlayerMovement : MonoBehaviour
 {
+    
+
+
 
     
     public Animator animator;
@@ -19,6 +22,11 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        
+        
+        int playerLayer = LayerMask.NameToLayer("Player");
+        int ignoreLayer = LayerMask.NameToLayer("HoldableObject"); 
+        Physics2D.IgnoreLayerCollision(playerLayer, ignoreLayer, true);
     }
 
     void Update()
