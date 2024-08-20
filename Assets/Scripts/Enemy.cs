@@ -91,6 +91,7 @@ public class Enemy : MonoBehaviour
             if (other.gameObject.TryGetComponent<PlayerHealth>(out var playerHealth))
             {
                 playerHealth.TakeDamage(10);
+                _animator.SetTrigger("Attack"); // Trigger attack animation
             }
         }
         else if (other.gameObject.CompareTag("HoldableObject"))
@@ -112,6 +113,7 @@ public class Enemy : MonoBehaviour
                 {
                     playerHealth.TakeDamage(damagePerSecond);
                     _damageTimer = 0f;
+                    _animator.SetTrigger("Attack"); // Trigger attack animation
                 }
             }
         }
