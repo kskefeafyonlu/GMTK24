@@ -4828,6 +4828,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4842634956462019051, guid: 7a67a4b4db570fe4c8e673c47541278d, type: 3}
+      propertyPath: m_Color.b
+      value: 0.97750646
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842634956462019051, guid: 7a67a4b4db570fe4c8e673c47541278d, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842634956462019051, guid: 7a67a4b4db570fe4c8e673c47541278d, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8207547
+      objectReference: {fileID: 0}
     - target: {fileID: 8852119782759115940, guid: 7a67a4b4db570fe4c8e673c47541278d, type: 3}
       propertyPath: upgrades
       value: 
@@ -4835,6 +4847,18 @@ PrefabInstance:
     - target: {fileID: 8852119782759115940, guid: 7a67a4b4db570fe4c8e673c47541278d, type: 3}
       propertyPath: maxLineLength
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8956613679951494209, guid: 7a67a4b4db570fe4c8e673c47541278d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.32344252
+      objectReference: {fileID: 0}
+    - target: {fileID: 8956613679951494209, guid: 7a67a4b4db570fe4c8e673c47541278d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.32344252
+      objectReference: {fileID: 0}
+    - target: {fileID: 8956613679951494209, guid: 7a67a4b4db570fe4c8e673c47541278d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.32344252
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
