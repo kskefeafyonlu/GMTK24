@@ -1,16 +1,19 @@
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class ScaleGun : MonoBehaviour
 {
-    public Upgrades upgrades;
+    public AudioClip orbStartSound;
+    public AudioClip orbSustainSound;
 
+    public Upgrades upgrades;
     public PlayerMovement playerMovement;
     private Camera _mainCam;
 
     public Material lineMaterial;
     public Material splineMaterial;
     public HoldableObject hitHoldableObject;
-    
+
     public float slerpSpeed = 5f;
     public float initialLength;
     public float maxLineLength = 10f;
@@ -30,15 +33,16 @@ public class ScaleGun : MonoBehaviour
     private Vector3 _objectVelocity;
     private float throwForce;
 
-
     private float _initialDistanceToPlayer;
-
     public GameObject objectPrefab;
+
+    private AudioSource _audioSource;
 
     private void Awake()
     {
         _mainCam = Camera.main;
         playerMovement = GetComponentInParent<PlayerMovement>();
+        _audioSource = GetComponent<AudioSource>();
 
         InitializeLineRenderer();
         InitializeSplineRenderer();
@@ -62,31 +66,30 @@ public class ScaleGun : MonoBehaviour
         {
             Instantiate(objectPrefab, transform.position + transform.right * 2, Quaternion.identity);
         }
-        
+
         UpdateUpgradeValues();
     }
 
     private void Shoot()
-{
-    if (hitHoldableObject != null)
     {
-        _isHoldingObject = false;
-        _isInHoldMode = false;
-
-        Vector3 mousePosition = _mainCam.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 direction = (mousePosition - hitHoldableObject.transform.position).normalized;
-
-        Rigidbody2D rb = hitHoldableObject.GetComponent<Rigidbody2D>();
-        if (rb != null)
+        if (hitHoldableObject != null)
         {
-            throwForce = upgrades.UpgradesUI[2].Points * shootForceSpeed; // Use upgrade points for throw force
-            rb.velocity = direction * throwForce * _objectVelocity.magnitude;
-        }
+            _isHoldingObject = false;
+            _isInHoldMode = false;
 
-        hitHoldableObject = null;
+            Vector3 mousePosition = _mainCam.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 direction = (mousePosition - hitHoldableObject.transform.position).normalized;
+
+            Rigidbody2D rb = hitHoldableObject.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                throwForce = upgrades.UpgradesUI[2].Points * shootForceSpeed; // Use upgrade points for throw force
+                rb.velocity = direction * throwForce * _objectVelocity.magnitude;
+            }
+
+            hitHoldableObject = null;
+        }
     }
-}
-    
 
     private void InitializeLineRenderer()
     {
@@ -144,6 +147,10 @@ public class ScaleGun : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             _isInHoldMode = true;
+            if (orbStartSound != null)
+            {
+                _audioSource.PlayOneShot(orbStartSound);
+            }
         }
 
         if (Input.GetMouseButton(0) && _isInHoldMode)
@@ -151,6 +158,12 @@ public class ScaleGun : MonoBehaviour
             if (hitHoldableObject != null && !_isHoldingObject)
             {
                 StartHoldingObject();
+                // Stop the start sound and play the sustain sound directly
+                _audioSource.Stop();
+                if (orbSustainSound != null)
+                {
+                    _audioSource.PlayOneShot(orbSustainSound);
+                }
             }
 
             if (_isHoldingObject)
@@ -178,6 +191,9 @@ public class ScaleGun : MonoBehaviour
             DecreaseLineLength();
             ResetLineRenderer();
             DisableSplineRenderer();
+
+            // Stop sounds when left click is released
+            _audioSource.Stop();
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -185,6 +201,9 @@ public class ScaleGun : MonoBehaviour
             Shoot();
             ResetLineRenderer();
             DisableSplineRenderer();
+
+            // Stop sounds when right click is pressed
+            _audioSource.Stop();
         }
     }
 
@@ -204,7 +223,6 @@ public class ScaleGun : MonoBehaviour
         _isHoldingObject = true;
         _lastPosition = hitHoldableObject.transform.position;
     }
-
 
     private float affectingSlerpSpeed = 1;
     private void ControlHoldableObject()
@@ -297,7 +315,6 @@ public class ScaleGun : MonoBehaviour
         _currentLineLength = initialLength;
     }
 
-    
     private float affectingMaxLineLength = 1;
     private void IncreaseLineLength()
     {
@@ -317,10 +334,8 @@ public class ScaleGun : MonoBehaviour
 
     private void UpdateUpgradeValues()
     {
-        
         affectingSlerpSpeed = upgrades.UpgradesUI[0].Points * slerpSpeed;
         affectingMaxLineLength = upgrades.UpgradesUI[1].Points * maxLineLength;
         scaleChangeSpeed = upgrades.UpgradesUI[3].Points;
-        
     }
 }

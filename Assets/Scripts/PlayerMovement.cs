@@ -1,7 +1,10 @@
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class PlayerMovement : MonoBehaviour
 {
+
+    
     public Animator animator;
     public float moveSpeed;
     public GameObject playerGun;

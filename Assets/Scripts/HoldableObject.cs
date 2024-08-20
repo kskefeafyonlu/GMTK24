@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class HoldableObject : MonoBehaviour
 {
+    public AudioClip breakingSound;
+
     public float Mass = 1f;
     public float MaxScale = 2f;
     public float MinScale = 0.5f;
@@ -22,6 +24,7 @@ public class HoldableObject : MonoBehaviour
         {
             return 10;
         }
+
         return 0;
     }
 
@@ -30,6 +33,7 @@ public class HoldableObject : MonoBehaviour
         HP -= damage;
         if (HP <= 0)
         {
+            SoundManager.Instance.PlaySFX(breakingSound, 1f);
             Destroy(gameObject);
         }
     }

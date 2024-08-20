@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
+    public AudioClip deathSound;
+    public AudioClip hitSound;
+
     private int _maxHealth = 100;
     private int _health = 100;
     private float currentHealth;
@@ -21,10 +24,13 @@ public class PlayerHealth : MonoBehaviour
     private float _invincibilityDuration = 0.2f;
     private float _invincibilityTimer = 0f;
 
+    private AudioSource _audioSource;
+
     private void Awake()
     {
         healthText = healthSlider.GetComponentInChildren<TextMeshProUGUI>();
         currentHealth = _health;
+        _audioSource = GetComponent<AudioSource>();
         UpdateUI();
     }
 
@@ -65,6 +71,13 @@ public class PlayerHealth : MonoBehaviour
             _health = 0;
             Die();
         }
+        else
+        {
+            if (hitSound != null)
+            {
+                _audioSource.PlayOneShot(hitSound);
+            }
+        }
         UpdateUI();
         StartInvincibility();
     }
@@ -82,6 +95,10 @@ public class PlayerHealth : MonoBehaviour
     public void Die()
     {
         Debug.Log("Player died");
+        if (deathSound != null)
+        {
+            _audioSource.PlayOneShot(deathSound);
+        }
     }
 
     private void UpdateUI()

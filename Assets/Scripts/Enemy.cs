@@ -2,12 +2,20 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+[RequireComponent(typeof(AudioSource))]
 public class Enemy : MonoBehaviour
 {
+    public AudioClip deathSound;
+    public AudioClip attackSound;
+    public AudioClip hitSound;
+    public AudioClip walkSound;
+
     private Transform _target;
     private Rigidbody2D _rb;
     private SpriteRenderer _spriteRenderer;
     private Animator _animator;
+    private AudioSource _audioSource;
 
     public float minSpeed = 1f;
     public float maxSpeed = 1.5f;
@@ -35,6 +43,7 @@ public class Enemy : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
         _healthBar = GetComponentInChildren<Slider>();
         currentHealth = maxHealth;
         movementSpeed = Random.Range(minSpeed, maxSpeed);
@@ -50,6 +59,15 @@ public class Enemy : MonoBehaviour
             {
                 TakeDamage(15);
                 _campfireDamageTimer = 0f;
+            }
+        }
+
+        // Play walk sound when the enemy is moving
+        if (_rb.velocity.magnitude > 0 && !_audioSource.isPlaying)
+        {
+            if (walkSound != null)
+            {
+                _audioSource.PlayOneShot(walkSound, 0.5f); // Adjust volume as needed
             }
         }
     }
@@ -80,6 +98,10 @@ public class Enemy : MonoBehaviour
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
+            if (deathSound != null)
+            {
+                SoundManager.Instance.PlaySFX(deathSound, 1f);
+            }
             currentHealth = 0;
             Die();
         }
@@ -87,6 +109,10 @@ public class Enemy : MonoBehaviour
         {
             _animator.SetTrigger("OnHit");
             StartCoroutine(SlowdownEffect());
+            if (hitSound != null)
+            {
+                _audioSource.PlayOneShot(hitSound, 1f); // Play hit sound
+            }
         }
         UpdateUI();
         ShowFloatingText(damage);
@@ -123,6 +149,10 @@ public class Enemy : MonoBehaviour
             {
                 playerHealth.TakeDamage(10);
                 _animator.SetTrigger("Attack");
+                if (attackSound != null)
+                {
+                    _audioSource.PlayOneShot(attackSound, 1f); // Play attack sound
+                }
             }
         }
         else if (other.gameObject.CompareTag("HoldableObject"))
