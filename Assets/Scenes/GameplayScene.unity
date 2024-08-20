@@ -5685,7 +5685,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1408805212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5740,7 +5740,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 0.77505875, b: 0.36037737, a: 1}
+  m_Color: {r: 1, g: 0.7110549, b: 0.39811313, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -7201,16 +7201,23 @@ MonoBehaviour:
   - enemyCount: 5
     enemyPrefabs:
     - {fileID: 6017258332771405301, guid: ad9dce07d3e7ed34e99906bdb31fa38b, type: 3}
-    - {fileID: 6017258332771405301, guid: ed4409f21409df4489c0ccd649740c5e, type: 3}
-    - {fileID: 6017258332771405301, guid: 73100b66cf027964fbab364f2b8c0af9, type: 3}
     spawnInterval: 1
   - enemyCount: 10
     enemyPrefabs:
     - {fileID: 6017258332771405301, guid: ad9dce07d3e7ed34e99906bdb31fa38b, type: 3}
+    - {fileID: 6017258332771405301, guid: 73100b66cf027964fbab364f2b8c0af9, type: 3}
     spawnInterval: 0.5
-  - enemyCount: 5
+  - enemyCount: 15
     enemyPrefabs:
     - {fileID: 6017258332771405301, guid: ad9dce07d3e7ed34e99906bdb31fa38b, type: 3}
+    - {fileID: 6017258332771405301, guid: ed4409f21409df4489c0ccd649740c5e, type: 3}
+    - {fileID: 6017258332771405301, guid: 73100b66cf027964fbab364f2b8c0af9, type: 3}
+    spawnInterval: 0.5
+  - enemyCount: 20
+    enemyPrefabs:
+    - {fileID: 6017258332771405301, guid: ad9dce07d3e7ed34e99906bdb31fa38b, type: 3}
+    - {fileID: 6017258332771405301, guid: ed4409f21409df4489c0ccd649740c5e, type: 3}
+    - {fileID: 6017258332771405301, guid: 73100b66cf027964fbab364f2b8c0af9, type: 3}
     spawnInterval: 0.1
   GraceTimeBetweenWaves: 5
 --- !u!4 &1966447137
@@ -7917,7 +7924,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2141567739
 MonoBehaviour:
   m_ObjectHideFlags: 0
