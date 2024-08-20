@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7d1cf6a-e92c-45bd-a665-2be9cfa079f5" name="Changes" comment="" />
+    <list default="true" id="e7d1cf6a-e92c-45bd-a665-2be9cfa079f5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Player.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameplayScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameplayScene.unity" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -106,6 +109,7 @@
       <workItem from="1724092807489" duration="2598000" />
       <workItem from="1724136716769" duration="871000" />
       <workItem from="1724145655104" duration="3279000" />
+      <workItem from="1724155803575" duration="485000" />
     </task>
     <servers />
   </component>
