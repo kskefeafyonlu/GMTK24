@@ -2495,13 +2495,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs:
-  - {fileID: 5986408761781316585, guid: db9c40c14b3ac2348a355a0835869e50, type: 3}
   - {fileID: 6766211124129480591, guid: 68f0cc6d08ecc1f4e9bcf7eee93f024a, type: 3}
   - {fileID: 4586314487829833615, guid: 40509550593085841baebf835e04287c, type: 3}
   - {fileID: 6184032700748008884, guid: 86b7eabdfb8fa8d4aa66fb7c8e15a2de, type: 3}
-  spawnInterval: 5
+  - {fileID: 4586314487829833615, guid: b66322a43db98ac40adc3ca9bb39fb05, type: 3}
+  spawnInterval: 10
   minDistance: 6
-  maxAttempts: 5
+  maxAttempts: 10
 --- !u!114 &1050326276
 MonoBehaviour:
   m_ObjectHideFlags: 0
