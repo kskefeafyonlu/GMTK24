@@ -15,6 +15,14 @@ public class SceneManager : MonoBehaviour
         mainMenuUI.SetActive(true);
         settingsUI.SetActive(false);
     }
+    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ToggleSettings();
+        }
+    }
 
     public void LoadScene(string sceneName)
     {
@@ -28,8 +36,16 @@ public class SceneManager : MonoBehaviour
 
     public void ToggleSettings()
     {
-        mainMenuUI.SetActive(!mainMenuUI.activeSelf);
-        settingsUI.SetActive(!settingsUI.activeSelf);
+
+        if (mainMenuUI != null)
+        {
+            mainMenuUI.SetActive(!mainMenuUI.activeSelf);
+        }
+        if (settingsUI != null)
+        {
+            settingsUI.SetActive(!settingsUI.activeSelf);
+        }
+
     }
 
     public void ReloadCurrentScene()
