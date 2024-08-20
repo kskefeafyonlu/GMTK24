@@ -38,10 +38,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeDamage(10);
-        }
+
 
         // Smoothly interpolate the health slider value
         healthSlider.value = Mathf.Lerp(healthSlider.value, (float)_health / _maxHealth, Time.deltaTime * lerpSpeed);
